@@ -1,0 +1,31 @@
+﻿@model AuctionItemDto
+@{
+    ViewData["Title"] = "Delete Auction Item";
+}
+
+<div class="container my-4">
+    <h1>@ViewData["Title"]</h1>
+    <hr />
+
+    <form asp-action="Delete" method="post" asp-route-id="@Model.Id">
+        <div class="form-group">
+            <label asp-for="itemName" class="control-label">Name</label>
+            <p>@Model.itemName</p>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="itemDescription" class="control-label">Description</label>
+            <p>@Model.itemDescription</p>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="startingBid" class="control-label">Starting Bid</label>
+            <p>@Model.startingBid</p>
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-danger">Delete</button>
+            <a asp-controller="AuctionItem" asp-action="Index" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>

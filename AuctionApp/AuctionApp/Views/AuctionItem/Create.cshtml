@@ -1,0 +1,91 @@
+﻿@{
+    ViewData["Title"] = "AuctionItemCreate";
+}
+<div class="container mt-4">
+    <h1>Create Auction Item</h1>
+    <form method="post" name="Create" onsubmit="return validateForm()">
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" class="form-control" id="itemName" name="ItemName">
+        </div>
+        <div class="form-group">
+            <label for="description">Description:</label>
+            <textarea class="form-control" id="itemDescription" name="ItemDescription" rows="3"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="startingBid">Starting Bid:</label>
+            <input type="number" class="form-control" id="startingBid" name="StartingBid">
+        </div>
+        <div class="form-group">
+            <label for="itemEndDte">Date the bid ends:</label>
+            <input type="date" class="form-control" id="itemEndDate" name="ItemEndDate"value="">
+        </div>
+        <div>
+            <label id="alert"></label>
+        </div>
+        <button type="submit" class="btn btn-primary">Create</button>
+    </form>
+    <form onsubmit="return validateForm()">
+        <button type="submit" class="btn btn-primary" id="test">TEst</button>
+    </form>
+</div>
+
+<style>
+    #alert{
+        color:crimson;
+    }
+
+    h1 {
+        color: #3f51b5;
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    form {
+        background-color: #f2f2f2;
+        padding: 2rem;
+        border-radius: 5px;
+        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    }
+
+    .form-group label {
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+    }
+
+    .form-control {
+        border: none;
+        border-radius: 0;
+        box-shadow: none;
+        background-color: #ffffff;
+    }
+
+        .form-control:focus {
+            border: none;
+            box-shadow: none;
+        }
+
+    textarea.form-control {
+        resize: vertical;
+    }
+
+    button[type=submit] {
+        margin-top: 1rem;
+    }
+
+</style>
+<script>
+   function validateForm() {
+      let name = document.forms["Create"]["ItemName"].value;
+      let decription = document.forms["Create"]["ItemDescription"].value;
+      let bid = document.forms["Create"]["StartingBid"].value;
+      let alert = document.getElementById("alert");
+        if (name == "" || description == "" || bid == "") {
+            alert.innerHTML="Enter all fields";
+            return false;
+        }
+}
+</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

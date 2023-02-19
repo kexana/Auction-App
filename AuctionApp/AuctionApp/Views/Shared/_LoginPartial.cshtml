@@ -1,0 +1,28 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using AuctionApp.Data.Models;
+@inject SignInManager<AuctionUser> SignInManager
+@inject UserManager<AuctionUser> UserManager
+
+<ul >
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <li>
+            <a asp-area="Administration" asp-controller="AdministrationPanel" asp-action="Index">Admin Panel</a>
+        </li>
+        <li >
+            <a asp-area="Identity" asp-page="/Account/Manage/Index">Hello @User.Identity?.Name!</a>
+        </li>
+        <li>
+            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Logout">Logout</a>
+        </li>
+    }
+    else
+    {
+        <li>
+            <a class="nav-link text-dark" asp-area="Users" asp-page="/Account/Login">Login </a>
+        </li>
+        <li>
+            <a class="nav-link text-dark" asp-area="Users"  asp-page="/Account/Register">Register </a>
+        </li>
+    }
+</ul>

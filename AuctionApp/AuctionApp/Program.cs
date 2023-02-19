@@ -1,6 +1,7 @@
 using AuctionApp.Data;
 using AuctionApp.Data.Models;
 using AuctionApp.Services;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -31,11 +32,12 @@ namespace AuctionApp.Web
                     options.Password.RequiredLength = 3;
                 })
                 .AddEntityFrameworkStores<AuctionAppDbContext>()
-                .AddDefaultTokenProviders(); ;
-
+                .AddDefaultTokenProviders();
 
             builder.Services.AddRazorPages();
             builder.Services.AddHttpContextAccessor();
+
+
         }
 
         private static void ConfigureAndRunApplication(WebApplicationBuilder builder)
@@ -45,7 +47,7 @@ namespace AuctionApp.Web
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
-                //app.UseMigrationsEndPoint();
+                app.UseMigrationsEndPoint();
             }
             else
             {

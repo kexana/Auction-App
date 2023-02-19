@@ -1,0 +1,43 @@
+﻿@page
+@using AuctionApp.Areas.Users.Pages.Account
+
+@model RegisterModel
+
+@{
+    ViewData["Title"] = "Register";
+}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card my-4">
+                <div class="card-body">
+                    <h2 class="card-title">Register</h2>
+                    <hr />
+
+                    <form method="post">
+                        <div asp-validation-summary="All" class="text-danger"></div>
+
+                        <div class="forum-form-group">
+                            <label asp-for="Input.Username" >Username</label>
+                            <input asp-for="Input.Username" class="form-control" type="text" name="username" placeholder="Username..." />
+                        </div>
+                        <div class="forum-form-group">
+                            <label asp-for="Input.Email" >Email</label>
+                            <input asp-for="Input.Email" class="form-control" type="text" name="email" placeholder="Email..." />
+                        </div>
+                        <div class="forum-form-group">
+                            <label asp-for="Input.Password" >Password</label>
+                            <input asp-for="Input.Password" class="form-control" type="password" name="password" placeholder="Password..." />
+                        </div>
+                        <div class="forum-form-group">
+                            <label asp-for="Input.ConfirmPassword" >Confirm Password</label>
+                            <input asp-for="Input.ConfirmPassword" class="form-control" type="password" name="confirmPassword" placeholder="Confirm Password..." />
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Register</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

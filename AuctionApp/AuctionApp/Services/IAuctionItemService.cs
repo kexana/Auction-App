@@ -4,14 +4,14 @@ namespace AuctionApp.Services
 {
     public interface IAuctionItemService
     {
-        Task<AuctionItemDto> CreateForumSection(AuctionItemDto auctionItemDto);
+        Task<AuctionItemDto> CreateAuctionItem(AuctionItemDto auctionItemDto);
 
-        IQueryable<AuctionItemDto> GetAllForumSections(bool fetchDeleted = false);
+        IQueryable<AuctionItemDto> GetAllAuctionItems(bool fetchDeleted = false);
 
-        Task<AuctionItemDto> GetForumSectionById(long id);
+        Task<AuctionItemDto> GetAuctionItemById(long id);
 
-        Task<AuctionItemDto> UpdateForumSection(long id, AuctionItemDto auctionItemDto);
+        Task<AuctionItemDto> UpdateAuctionItem(long id, AuctionItemDto auctionItemDto);
 
-        Task<AuctionItemDto> DeleteForumSection(long id);
+        Task<AuctionItemDto> DeleteAuctionItem(long id);
     }
 }
