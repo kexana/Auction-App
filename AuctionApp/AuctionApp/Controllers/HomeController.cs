@@ -1,22 +1,29 @@
 ﻿using AuctionApp.Data.Models;
 using AuctionApp.ModelDtos;
+using AuctionApp.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Linq;
 
 namespace AuctionApp.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IAuctionItemService _auctionItemService;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IAuctionItemService auctionItemService)
         {
             _logger = logger;
+            _auctionItemService= auctionItemService;
         }
-
+        [HttpGet]
         public IActionResult Index()
         {
-            return View();
+            IEnumerable<AuctionItemDto> trendingItems = new List<AuctionItemDto>();
+            trendingItems = _auctionItemService.GetAllAuctionItems();
+
+            return View(trendingItems);
         }
 
         public IActionResult Privacy()

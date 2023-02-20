@@ -33,8 +33,11 @@
                             <label asp-for="Input.ConfirmPassword" >Confirm Password</label>
                             <input asp-for="Input.ConfirmPassword" class="form-control" type="password" name="confirmPassword" placeholder="Confirm Password..." />
                         </div>
-
                         <button type="submit" class="btn btn-primary">Register</button>
+                        <div>
+                            Already have an account?
+                            <a asp-area="Users" asp-page="/Account/Login" class="forum-form-button">Login</a>
+                        </div>
                     </form>
                 </div>
             </div>

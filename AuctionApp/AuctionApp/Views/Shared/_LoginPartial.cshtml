@@ -3,26 +3,25 @@
 @inject SignInManager<AuctionUser> SignInManager
 @inject UserManager<AuctionUser> UserManager
 
-<ul >
-    @if (SignInManager.IsSignedIn(User))
-    {
-        <li>
-            <a asp-area="Administration" asp-controller="AdministrationPanel" asp-action="Index">Admin Panel</a>
-        </li>
-        <li >
-            <a asp-area="Identity" asp-page="/Account/Manage/Index">Hello @User.Identity?.Name!</a>
-        </li>
-        <li>
-            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Logout">Logout</a>
-        </li>
-    }
-    else
-    {
-        <li>
-            <a class="nav-link text-dark" asp-area="Users" asp-page="/Account/Login">Login </a>
-        </li>
-        <li>
-            <a class="nav-link text-dark" asp-area="Users"  asp-page="/Account/Register">Register </a>
-        </li>
-    }
-</ul>
+@if (SignInManager.IsSignedIn(User))
+{
+    <li class="nav-bar-right">
+        <a class="nav-link" asp-area="Administration" asp-controller="AdministrationPanel" asp-action="Index">Admin Panel</a>
+    </li>
+    <li class="nav-bar-left"><a class="nav-link" asp-controller="AuctionItem" asp-action="AuctionItemIndex">Items</a></li>
+    <li class="nav-bar-right">
+        <a class="nav-link" asp-area="Users" asp-page="/Account/Manage/Index">Hello @User.Identity?.Name!</a>
+    </li>
+    <li class="nav-bar-right" style="color:chartreuse;">
+        <a class="nav-link" asp-area="Users" asp-page="/Account/Logout">Logout</a>
+    </li>
+}
+else
+{
+    <li class="nav-bar-right" id="signinreg">
+        Hello!
+        <a class="identity-link" asp-area="Users" asp-page="/Account/Login">Sign in</a>
+        or
+        <a class="identity-link" asp-area="Users" asp-page="/Account/Register">Register</a>
+    </li>
+}

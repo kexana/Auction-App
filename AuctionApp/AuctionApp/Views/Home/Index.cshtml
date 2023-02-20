@@ -1,8 +1,70 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+@model IEnumerable<AuctionItemDto>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<nav>
+    <div class="search-container">
+        <form action="/action_page.php">
+            <input type="text" placeholder="Search for auction" name="search">
+            <select name="category" id="category">
+                <option value="" disabled selected>Categories</option>
+                <option value="volvo">Volvo</option>
+                <option value="saab">Saab</option>
+                <option value="opel">Opel</option>
+                <option value="audi">Audi</option>
+            </select>
+            <button type="submit">Search</button>
+        </form>
+    </div>
+</nav>
+<nav class="shortcuts">
+    <ul>
+        <li><a class="nav-link" href="#saved">Saved</a></li>
+        <li><a class="nav-link" href="#category">Electronics</a></li>
+        <li><a class="nav-link" href="#category">Motors</a></li>
+        <li><a class="nav-link" href="#category">Fashion</a></li>
+        <li><a class="nav-link" href="#category">Collectibles and Art</a></li>
+        <li><a class="nav-link" href="#category">Sports</a></li>
+        <li><a class="nav-link" href="#category">Health & Beauty</a></li>
+        <li><a class="nav-link" href="#category">Industrial equipment</a></li>
+        <li><a class="nav-link" href="#category">Home & Garden</a></li>
+        <li><a class="nav-link" href="#category">Deals</a></li>
+        <li><a class="nav-link" href="#category">Sell</a></li>
+    </ul>
+</nav>
+<div>
 </div>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Trending <b>Products</b></h2>
+                <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="0">
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <div class="row">
+                                @foreach(AuctionItemDto item in Model){
+                                    <div class="col-sm-3">
+                                        <div class="thumb-wrapper">
+                                            <div class="img-box">
+                                                <img src="/examples/images/products/ipad.jpg" class="img-fluid" alt="">
+                                            </div>
+                                            <div class="thumb-content">
+                                                <h4>@item.itemName</h4>
+                                                <p class="item-price"><span>@item.currentBid</span></p>
+                                                <label for="timeRemaining"> Time remining: </label>
+                                                <p id="timeRemaining"><span>3d 14h 5m</span></p>
+                                                <a href="#" class="btn btn-primary">Make a bid</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                 </div>
+              </div>
+          </div>
+       </div>
+    </body>

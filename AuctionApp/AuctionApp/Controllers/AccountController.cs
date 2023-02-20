@@ -49,5 +49,10 @@ namespace AuctionApp.Controllers
             //}
             return View();
         }
+        [HttpGet]
+        public IActionResult Logout()
+        {
+            return View("~/Views/Home/Index.cshtml");
+        }
     }
 }
