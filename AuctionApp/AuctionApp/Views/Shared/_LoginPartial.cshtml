@@ -5,10 +5,20 @@
 
 @if (SignInManager.IsSignedIn(User))
 {
-    <li class="nav-bar-right">
-        <a class="nav-link" asp-area="Administration" asp-controller="AdministrationPanel" asp-action="Index">Admin Panel</a>
-    </li>
-    <li class="nav-bar-left"><a class="nav-link" asp-controller="AuctionItem" asp-action="AuctionItemIndex">Items</a></li>
+    @if (User.IsInRole("Admin"))
+    {
+        <li class="nav-bar-right">
+         <div class="dropdown">
+            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Admin Panel
+            </a>
+            <div class="dropdown-menu bg-secondary">
+                <a class="nav-link dropdown-item" asp-area="Administration" asp-controller="AdministrationPanel" asp-action="UserIndex">Users</a>
+                <a class="nav-link dropdown-item" asp-area="Administration" asp-controller="AdministrationPanel" asp-action="AuctionItemIndex">Auction Items</a>
+            </div>
+        </div>
+        </li>
+    }
     <li class="nav-bar-right">
         <a class="nav-link" asp-area="Users" asp-page="/Account/Manage/Index">Hello @User.Identity?.Name!</a>
     </li>

@@ -21,7 +21,7 @@ namespace AuctionApp.Controllers
         public IActionResult Index()
         {
             IEnumerable<AuctionItemDto> trendingItems = new List<AuctionItemDto>();
-            trendingItems = _auctionItemService.GetAllAuctionItems();
+            trendingItems = _auctionItemService.GetFilteredAuctionItems();
 
             return View(trendingItems);
         }

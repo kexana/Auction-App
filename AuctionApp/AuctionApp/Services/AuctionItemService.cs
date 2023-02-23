@@ -4,6 +4,7 @@ using AuctionApp.ModelDtos;
 using AuctionApp.Services.Mapping;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Xml.Linq;
 
 namespace AuctionApp.Services
@@ -17,11 +18,12 @@ namespace AuctionApp.Services
             this.auctionDbContext = auctionDbContext;
         }
 
-        public async Task<AuctionItemDto> CreateAuctionItem(AuctionItemDto auctionItemDto)
+        public async Task<AuctionItemDto> CreateAuctionItem(AuctionItemDto auctionItemDto, AuctionUserDto auctionUserDto)
         {
             auctionItemDto.isActive= true;
             auctionItemDto.currentBid = auctionItemDto.startingBid;
             auctionItemDto.itemActivatedDate = DateTime.Now;
+            auctionItemDto.sellerUser = auctionUserDto;
 
             AuctionItemModel auctionItem = auctionItemDto.ToEntity();
 
@@ -53,6 +55,13 @@ namespace AuctionApp.Services
             IQueryable<AuctionItemModel> auctionItems = auctionDbContext.AuctionItems;
 
             return auctionItems.Select(item=>item.ToDto(true));
+        }
+
+        public IQueryable<AuctionItemDto> GetFilteredAuctionItems(bool fetchDeleted = false)
+        {
+            IQueryable<AuctionItemModel> auctionItems = auctionDbContext.AuctionItems;
+
+            return auctionItems.Where(item => item.isActive).OrderByDescending(item => item.itemActivatedDate).Select(item => item.ToDto(true));
         }
 
         public async Task<AuctionItemDto> GetAuctionItemById(long id)

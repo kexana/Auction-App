@@ -1,0 +1,72 @@
+﻿@model AdministrationPanelModel
+
+@{
+    ViewData["Title"] = "AuctionItemIndex";
+}
+
+<h1>AuctionItemIndex</h1>
+
+<p>
+    <a asp-controller="AuctionItem" asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Item Name
+            </th>
+            <th>
+                Item Description
+            </th>
+            <th>
+                Starting Bid
+            </th>
+            <th>
+                Current Bid
+            </th>
+            <th>
+                Date Activated
+            </th>
+            <th>
+                Date Ending
+            </th>
+            <th>
+                Is Active
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.itemName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.itemDescription)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.startingBid)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.currentBid)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.itemActivatedDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.itemEndDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.isActive)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+                    @Html.ActionLink("Details", "Details", new { id=item.Id}) |
+                    @Html.ActionLink("Delete", "Delete", new {id=item.Id })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

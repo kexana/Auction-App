@@ -1,4 +1,5 @@
 ﻿using AuctionApp.Data.Models;
+using System.Diagnostics.CodeAnalysis;
 
 namespace AuctionApp.ModelDtos
 {
@@ -8,6 +9,10 @@ namespace AuctionApp.ModelDtos
         public string itemName { get; set; }
 
         public string itemDescription { get; set; }
+
+        public string ItemImages { get; set; }
+
+        public string ItemTags { get; set; }
 
         public decimal startingBid { get; set; }
 

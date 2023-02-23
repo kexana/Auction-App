@@ -4,9 +4,11 @@ namespace AuctionApp.Services
 {
     public interface IAuctionItemService
     {
-        Task<AuctionItemDto> CreateAuctionItem(AuctionItemDto auctionItemDto);
+        Task<AuctionItemDto> CreateAuctionItem(AuctionItemDto auctionItemDto, AuctionUserDto auctionUserDto);
 
         IQueryable<AuctionItemDto> GetAllAuctionItems(bool fetchDeleted = false);
+
+        IQueryable<AuctionItemDto> GetFilteredAuctionItems(bool fetchDeleted = false);
 
         Task<AuctionItemDto> GetAuctionItemById(long id);
 

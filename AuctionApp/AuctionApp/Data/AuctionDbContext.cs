@@ -16,5 +16,5 @@ namespace AuctionApp.Data
 
             base.OnConfiguring(optionsBuilder);
         }
-     }
+    }
 }

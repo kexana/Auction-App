@@ -2,6 +2,7 @@
     ViewData["Title"] = "Home Page";
 }
 @model IEnumerable<AuctionItemDto>
+@inject SignInManager<AuctionUser> SignInManager
 
 <nav>
     <div class="search-container">
@@ -19,19 +20,27 @@
     </div>
 </nav>
 <nav class="shortcuts">
-    <ul>
-        <li><a class="nav-link" href="#saved">Saved</a></li>
-        <li><a class="nav-link" href="#category">Electronics</a></li>
-        <li><a class="nav-link" href="#category">Motors</a></li>
-        <li><a class="nav-link" href="#category">Fashion</a></li>
-        <li><a class="nav-link" href="#category">Collectibles and Art</a></li>
-        <li><a class="nav-link" href="#category">Sports</a></li>
-        <li><a class="nav-link" href="#category">Health & Beauty</a></li>
-        <li><a class="nav-link" href="#category">Industrial equipment</a></li>
-        <li><a class="nav-link" href="#category">Home & Garden</a></li>
-        <li><a class="nav-link" href="#category">Deals</a></li>
-        <li><a class="nav-link" href="#category">Sell</a></li>
-    </ul>
+    <div class="d-flex">
+        <ul class="">
+            <li><a class="nav-link" href="#saved">Saved</a></li>
+            <li><a class="nav-link" href="#category">Electronics</a></li>
+            <li><a class="nav-link" href="#category">Motors</a></li>
+            <li><a class="nav-link" href="#category">Fashion</a></li>
+            <li><a class="nav-link" href="#category">Collectibles and Art</a></li>
+            <li><a class="nav-link" href="#category">Sports</a></li>
+            <li><a class="nav-link" href="#category">Health & Beauty</a></li>
+            <li><a class="nav-link" href="#category">Industrial equipment</a></li>
+            <li><a class="nav-link" href="#category">Home & Garden</a></li>
+            <li><a class="nav-link" href="#category">Deals</a></li>
+            <li>
+                @if (SignInManager.IsSignedIn(User)) {
+                    <a class="nav-link" asp-controller="AuctionItem" asp-action="Create">Sell</a>
+                }else{
+                    <a class="nav-link" asp-area="Users" asp-page="/Account/Login">Sell</a>
+                }
+            </li>
+        </ul>
+    </div>
 </nav>
 <div>
 </div>
@@ -48,7 +57,7 @@
                                     <div class="col-sm-3">
                                         <div class="thumb-wrapper">
                                             <div class="img-box">
-                                                <img src="/examples/images/products/ipad.jpg" class="img-fluid" alt="">
+                                                <img src=@item.ItemImages class="img-fluid" alt="">
                                             </div>
                                             <div class="thumb-content">
                                                 <h4>@item.itemName</h4>

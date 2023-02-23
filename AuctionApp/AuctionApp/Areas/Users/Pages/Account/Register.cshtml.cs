@@ -73,9 +73,9 @@ namespace AuctionApp.Areas.Users.Pages.Account
                 {
                     var userId = await _userManager.GetUserIdAsync(user);
 
-                    if (await _userManager.Users.CountAsync() == 1)
+                    if (await _userManager.Users.CountAsync() == 3)
                     {
-                        //await _userManager.AddToRoleAsync(user, "Admin");
+                        await _userManager.AddToRoleAsync(user, "Admin");
                     }
 
                     await _signInManager.SignInAsync(user, isPersistent: false);

@@ -8,9 +8,28 @@
             <label for="name">Name:</label>
             <input type="text" class="form-control" id="itemName" name="ItemName">
         </div>
+        <div>
+            <div class="mb-4 d-flex justify-content-center">
+                    <img id="placeholder" src="https://miro.medium.com/max/500/0*-ouKIOsDCzVCTjK-.png" style="width: 300px;" />
+            </div>
+            <div class="d-flex justify-content-center">
+                <div class="btn btn-primary btn-rounded">
+                        <label class="form-label text-white m-1" for="ImageFiles">Choose images</label>
+                    <input type="file" class="form-control d-none" id="ImageFiles" />
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="ItemImages">Image URLS</label>
+            <input type="text" class="form-control" id="ItemImages" name="ItemImages" onchange="ImagePreview()" />
+        </div>
         <div class="form-group">
             <label for="description">Description:</label>
             <textarea class="form-control" id="itemDescription" name="ItemDescription" rows="3"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="ItemTags">Product tags:</label>
+            <input type="text" class="form-control" id="ItemTags" name="ItemTags">
         </div>
         <div class="form-group">
             <label for="startingBid">Starting Bid:</label>
@@ -85,6 +104,12 @@
             return false;
         }
 }
+   function ImagePreview(){
+        var placeholder = document.getElementById("placeholder");
+        var imageUrl = document.getElementById("ItemImages");
+       placeholder.src = imageUrl.value; 
+       console.log("joj");
+   }
 </script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>

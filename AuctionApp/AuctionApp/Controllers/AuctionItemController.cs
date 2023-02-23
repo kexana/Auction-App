@@ -2,16 +2,25 @@
 using AuctionApp.Services;
 using AuctionApp.ModelDtos;
 using Microsoft.AspNetCore.Identity;
+using AuctionApp.Data.Models;
+using Microsoft.AspNetCore.Authorization;
+using AuctionApp.Areas.Users.Pages.Account;
+using System.Security.Claims;
+using AuctionApp.Services.Mapping;
 
 namespace AuctionApp.Controllers
 {
-    public class AuctionItemController : Controller
+    public class AuctionItemController : BaseUserController
     {
         private readonly IAuctionItemService auctionItemService;
+        private readonly SignInManager<AuctionUser> signInManager;
+        private readonly UserManager<AuctionUser> userManager;
 
-        public AuctionItemController(IAuctionItemService auctionItemService)
+        public AuctionItemController(IAuctionItemService auctionItemService, SignInManager<AuctionUser> signInManager, UserManager<AuctionUser> userManager)
         {
             this.auctionItemService = auctionItemService;
+            this.signInManager = signInManager;
+            this.userManager = userManager;
         }
         [HttpGet]
         public IActionResult AuctionItemIndex()
@@ -19,14 +28,22 @@ namespace AuctionApp.Controllers
             return View(this.auctionItemService.GetAllAuctionItems());
         }
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult Create()
         {
-            return View();
+            if (signInManager.IsSignedIn(User))
+            {
+                return View();
+            }
+            return View("~/Views/Home/Index.cshtml");
         }
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> Create(AuctionItemDto auuctionItemDto)
         {
-            auctionItemService.CreateAuctionItem(auuctionItemDto);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            AuctionUser auctionUser = await userManager.FindByIdAsync(userId);
+            await auctionItemService.CreateAuctionItem(auuctionItemDto, auctionUser.ToDto());
 
             return View("~/Views/Home/Index.cshtml");
         }
@@ -34,7 +51,7 @@ namespace AuctionApp.Controllers
         public async Task<IActionResult> Edit(long id)
         {
             AuctionItemDto auctionItemDto = await auctionItemService.GetAuctionItemById(id);
-            return View(auctionItemDto);
+            return View("/AdministrationPanelController/Edit",auctionItemDto);
         }
         [HttpPost]
         public async Task<IActionResult> Edit(long id, AuctionItemDto auuctionItemDto)
@@ -47,7 +64,7 @@ namespace AuctionApp.Controllers
         public async Task<IActionResult> Delete(long id)
         {
             AuctionItemDto auctionItemDto = await auctionItemService.GetAuctionItemById(id);
-            return View(auctionItemDto);
+            return View("/AdministrationPanelController/Delete", auctionItemDto);
         }
         [HttpPost]
         public async Task<IActionResult> Delete(long id, AuctionItemDto auuctionItemDto)
@@ -60,7 +77,7 @@ namespace AuctionApp.Controllers
         public async Task<IActionResult> Details(long id)
         {
             AuctionItemDto auctionItemDto = await auctionItemService.GetAuctionItemById(id);
-            return View(auctionItemDto);
+            return View("/AdministrationPanelController/Details", auctionItemDto);
         }
     }
 }

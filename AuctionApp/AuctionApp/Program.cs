@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.SqlServer;
+using AuctionApp.Seed;
 
 namespace AuctionApp.Web
 {
@@ -56,7 +57,7 @@ namespace AuctionApp.Web
                 app.UseHsts();
             }
 
-            //app.SeedRoles();
+            app.SeedRoles();
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
