@@ -32,7 +32,7 @@ namespace AuctionApp.Areas.Administration.Controllers
         {
             await auctionItemService.UpdateAuctionItem(id, auuctionItemDto);
 
-            return Redirect("/Administration/Home");
+            return Redirect("/Administration/Home/ItemsIndex");
         }
         [HttpGet("Delete/{id}")]
         public async Task<IActionResult> Delete(long id)
@@ -45,7 +45,7 @@ namespace AuctionApp.Areas.Administration.Controllers
         {
             await auctionItemService.DeleteAuctionItem(id);
 
-            return Redirect("/Administration/Home");
+            return Redirect("/Administration/Home/ItemsIndex");
         }
         [HttpGet("Details/{id}")]
         public async Task<IActionResult> Details(long id)

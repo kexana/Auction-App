@@ -18,14 +18,17 @@ namespace AuctionApp.Services
             this.auctionDbContext = auctionDbContext;
         }
 
-        public async Task<AuctionItemDto> CreateAuctionItem(AuctionItemDto auctionItemDto, AuctionUserDto auctionUserDto)
+        public async Task<AuctionItemDto> CreateAuctionItem(AuctionItemDto auctionItemDto, AuctionUser auctionUser)
         {
             auctionItemDto.isActive= true;
             auctionItemDto.currentBid = auctionItemDto.startingBid;
             auctionItemDto.itemActivatedDate = DateTime.Now;
-            auctionItemDto.sellerUser = auctionUserDto;
+            auctionItemDto.buyerUserId = null;
 
             AuctionItemModel auctionItem = auctionItemDto.ToEntity();
+
+            auctionItem.sellerUser = auctionUser;
+            auctionItem.buyerUser = null;
 
             await this.auctionDbContext.AuctionItems.AddAsync(auctionItem);
             await this.auctionDbContext.SaveChangesAsync();
@@ -67,13 +70,13 @@ namespace AuctionApp.Services
         public async Task<AuctionItemDto> GetAuctionItemById(long id)
         {
             AuctionItemModel auctionItem = await this.auctionDbContext.AuctionItems
-               .Include(item => item.sellerUser)
-               .Include(item => item.buyerUser )
+            /*   .Include(item => item.sellerUser)
+               .Include(item => item.buyerUser )*/
                .SingleOrDefaultAsync(item => item.Id == id);
 
             if (auctionItem == null)
             {
-                throw new ArgumentException("The item you are trying to delete does not exist.");
+                throw new ArgumentException("The item you are trying to get does not exist.");
             }
 
             AuctionItemDto auctionItemDto = auctionItem.ToDto();

@@ -1,6 +1,5 @@
 ﻿using AuctionApp.WebModels.Administration.AdministrationPanel;
 using AuctionApp.Data.Models;
-using AuctionApp.WebModels.Administration.AdministrationPanel;
 using Microsoft.AspNetCore.Mvc;
 using AuctionApp.Services;
 using Microsoft.AspNetCore.Identity;

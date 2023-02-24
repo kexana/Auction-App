@@ -1,10 +1,11 @@
 ﻿using AuctionApp.ModelDtos;
+using AuctionApp.Data.Models;
 
 namespace AuctionApp.Services
 {
     public interface IAuctionItemService
     {
-        Task<AuctionItemDto> CreateAuctionItem(AuctionItemDto auctionItemDto, AuctionUserDto auctionUserDto);
+        Task<AuctionItemDto> CreateAuctionItem(AuctionItemDto auctionItemDto, AuctionUser auctionUser);
 
         IQueryable<AuctionItemDto> GetAllAuctionItems(bool fetchDeleted = false);
 

@@ -25,9 +25,16 @@ namespace AuctionApp.Data.Models
 
         public bool isActive { get; set; }
 
+        [AllowNull]
+        public string sellerUserId { get; set; }
+
+        [AllowNull]
         public AuctionUser sellerUser { get; set; }
 
         [AllowNull]
-        public AuctionUser buyerUser { get; set; }
+        public string? buyerUserId { get; set; }
+
+        [AllowNull]
+        public AuctionUser? buyerUser { get; set; }
     }
 }

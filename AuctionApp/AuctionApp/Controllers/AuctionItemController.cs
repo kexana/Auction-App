@@ -35,7 +35,7 @@ namespace AuctionApp.Controllers
             {
                 return View();
             }
-            return View("~/Views/Home/Index.cshtml");
+            return Redirect("/");
         }
         [HttpPost]
         [AllowAnonymous]
@@ -43,9 +43,9 @@ namespace AuctionApp.Controllers
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             AuctionUser auctionUser = await userManager.FindByIdAsync(userId);
-            await auctionItemService.CreateAuctionItem(auuctionItemDto, auctionUser.ToDto());
+            await auctionItemService.CreateAuctionItem(auuctionItemDto, auctionUser);
 
-            return View("~/Views/Home/Index.cshtml");
+            return Redirect("/");
         }
         [HttpGet]
         public async Task<IActionResult> Edit(long id)
@@ -58,7 +58,7 @@ namespace AuctionApp.Controllers
         {
             await auctionItemService.UpdateAuctionItem(id,auuctionItemDto);
 
-            return View("~/Views/Home/Index.cshtml");
+            return Redirect("/");
         }
         [HttpGet]
         public async Task<IActionResult> Delete(long id)
@@ -71,13 +71,19 @@ namespace AuctionApp.Controllers
         {
             await auctionItemService.DeleteAuctionItem(id);
 
-            return View("~/Views/Home/Index.cshtml");
+            return Redirect("/");
         }
         [HttpGet]
         public async Task<IActionResult> Details(long id)
         {
             AuctionItemDto auctionItemDto = await auctionItemService.GetAuctionItemById(id);
             return View("/AdministrationPanelController/Details", auctionItemDto);
+        }
+        [HttpGet]
+        public async Task<IActionResult> AuctionPage(long itemId) 
+        {
+            AuctionItemDto auctionItemDto = await auctionItemService.GetAuctionItemById(itemId);
+            return View(auctionItemDto);
         }
     }
 }

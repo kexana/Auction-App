@@ -24,7 +24,11 @@ namespace AuctionApp.ModelDtos
 
         public bool isActive { get; set; }
 
+        public string sellerUserId { get; set; }
+
         public AuctionUserDto sellerUser { get; set; }
+
+        public string buyerUserId { get; set; }
 
         public AuctionUserDto buyerUser { get; set; }
     }

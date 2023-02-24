@@ -1,7 +1,7 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
-@model IEnumerable<AuctionItemDto>
+@model IEnumerable<AuctionItemDto>?
 @inject SignInManager<AuctionUser> SignInManager
 
 <nav>
@@ -64,7 +64,7 @@
                                                 <p class="item-price"><span>@item.currentBid</span></p>
                                                 <label for="timeRemaining"> Time remining: </label>
                                                 <p id="timeRemaining"><span>3d 14h 5m</span></p>
-                                                <a href="#" class="btn btn-primary">Make a bid</a>
+                                                <a asp-controller="AuctionItem" asp-action="AuctionPage" asp-route-itemId="@item.Id" class="btn btn-primary">Make a bid</a>
                                             </div>
                                         </div>
                                     </div>

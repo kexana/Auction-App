@@ -20,6 +20,8 @@ namespace AuctionApp.Services.Mapping
                 isActive = auctionItemDto.isActive,
                 startingBid = auctionItemDto.startingBid,
                 currentBid = auctionItemDto.currentBid,
+                buyerUserId= auctionItemDto.buyerUserId,
+                sellerUserId= auctionItemDto.sellerUserId,
             };
         }
 
@@ -39,8 +41,7 @@ namespace AuctionApp.Services.Mapping
                 isActive = auctionItem.isActive,
                 startingBid = auctionItem.startingBid,
                 currentBid = auctionItem.currentBid,
-                buyerUser = fetchUser ? auctionItem.buyerUser?.ToDto() : null,
-                sellerUser = fetchUser ? auctionItem.sellerUser?.ToDto() : null,
+                sellerUserId = auctionItem.sellerUserId,
             };
         }
     }
