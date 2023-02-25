@@ -21,13 +21,22 @@
                     </div>
                     <div class="mx-auto order-0">
                         <partial name="_LoginPartial" />
-                        <li class="nav-bar-right"><a class="nav-ico-link" href="#cart"><img class="ico" src="https://cdn-icons-png.flaticon.com/512/60/60992.png"></a></li>
-                        <li class="nav-bar-right"><a class="nav-ico-link" href="#notifications"><img class="ico" src="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-ios7-bell-512.png"></a></li>
-                        <li class="nav-bar-right"><a class="nav-link" href="#myshop">My shop</a></li>
-                        <li class="nav-bar-right"><a class="nav-link" href="#watchlist">Watchlist</a></li>
-                        <li class="nav-bar-right"><a class="nav-link" href="#sell">Sell</a></li>
-                        <li class="nav-bar-right"><a class="nav-link" href="#ship">Ship to</a></li>
-                        
+                        @if (SignInManager.IsSignedIn(User)) {
+                            <li class="nav-bar-right"><a class="nav-ico-link" href="#notifications"><img class="ico" src="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-ios7-bell-512.png"></a></li>
+                            <li class="nav-bar-right"><a class="nav-link" asp-area="Users" asp-page="/AccountPage">My shop</a></li>
+                            <li class="nav-bar-right"><a class="nav-link" href="#watchlist">Watchlist</a></li>
+                            <li class ="nav-bar-right"><a class="nav-link" asp-controller="AuctionItem" asp-action="Create">Sell</a></li>
+                            <li class="nav-bar-right"><a class="nav-link" href="#ship">Ship to</a></li>
+                        }
+                        else
+                        {
+                            <li class="nav-bar-right"><a class="nav-link" asp-area="Users" asp-page="/Account/Login"><img class="ico" src="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-ios7-bell-512.png"></a> </li>
+                            <li class="nav-bar-right"><a class="nav-link" asp-area="Users" asp-page="/Account/Login">My shop</a></li>
+                            <li class="nav-bar-right"><a class="nav-link" asp-area="Users" asp-page="/Account/Login">Watchlist</a></li>
+                            <li class="nav-bar-right"><a class="nav-link" asp-area="Users" asp-page="/Account/Login">Sell</a></li>
+                            <li class="nav-bar-right"><a class="nav-link" asp-area="Users" asp-page="/Account/Login">Ship to</a></li>
+                        }
+
                     </div>
                 </div>
             </div>

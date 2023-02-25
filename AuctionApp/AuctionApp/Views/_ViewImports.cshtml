@@ -3,4 +3,7 @@
 @using AuctionApp.Data.Models
 @using AuctionApp.ModelDtos
 @using AuctionApp.Areas.Users.Pages.Account
+@using Microsoft.AspNetCore.Mvc;
+
+@inject SignInManager<AuctionUser> SignInManager
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers

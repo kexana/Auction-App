@@ -1,4 +1,5 @@
 ﻿@model AuctionItemDto
+@inject SignInManager<AuctionUser> SignInManager
 
 <div class="container">
     <div class="row">
@@ -9,6 +10,8 @@
             <h2>@Model.itemName</h2>
             <h5 class="text-muted">@Model.ItemTags</h5>
             <p>@Model.itemDescription</p>
+            <label for="seller">Seller:</label>
+            <a asp-area="Users" asp-page="/SellerPage" asp-route-userId="@Model.sellerUserId">@Model.sellerUser.UserName</a>
             <div class="d-flex justify-content-between">
                 <div>
                     <h5 class="text-muted">Starting Bid:</h5>
@@ -20,16 +23,34 @@
                 </div>
             </div>
             <div>
-                <h5 class="text-muted">Ends on:</h5>
-                <h4>@Model.itemEndDate</h4>
+                <h5 class="text-muted">Ends in:</h5>
+                <h4>@string.Format("{0}d {1}h {2}m", ((TimeSpan)(Model.itemEndDate - DateTime.Now)).Days, ((TimeSpan)(Model.itemEndDate - DateTime.Now)).Hours, ((TimeSpan)(Model.itemEndDate - DateTime.Now)).Minutes)</h4>
             </div>
-            <form method="post" asp-controller="Auction" asp-action="PlaceBid">
+            <form method="post" asp-controller="AuctionItem" asp-action="PlaceBid" asp-route-itemId="@Model.Id" asp-route-bid="">
                 <input type="hidden" name="productId" value="@Model.Id" />
                 <div class="form-group">
                     <label for="bidAmount">Bid Amount:</label>
-                    <input type="number" class="form-control" name="bidAmount" id="bidAmount" min="@Model.currentBid + 1" step="1" required />
+                    <input type="number" class="form-control" name="bid" id="bid" min="@Model.currentBid + 1" step="1" required value="@Model.currentBid+1" />
                 </div>
-                <button type="submit" class="btn btn-primary">Place Bid</button>
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    <button type="submit" class="btn btn-primary">Place Bid</button>
+                }
+                else
+                {
+                    <a class="btn btn-primary" asp-area="Users" asp-page="/Account/Login">Place Bid</a>
+                }
+                @if (!ViewContext.ViewData.ModelState.IsValid)
+                {
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach (var error in ViewContext.ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                            {
+                                <li>@error.ErrorMessage</li>
+                            }
+                        </ul>
+                    </div>
+                }
             </form>
         </div>
     </div>

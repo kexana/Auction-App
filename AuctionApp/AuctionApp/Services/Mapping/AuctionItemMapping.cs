@@ -42,6 +42,9 @@ namespace AuctionApp.Services.Mapping
                 startingBid = auctionItem.startingBid,
                 currentBid = auctionItem.currentBid,
                 sellerUserId = auctionItem.sellerUserId,
+                buyerUserId = auctionItem.buyerUserId,
+                sellerUser = fetchUser ? auctionItem.sellerUser?.ToDto():null,
+                buyerUser = fetchUser ? auctionItem.buyerUser?.ToDto():null,
             };
         }
     }

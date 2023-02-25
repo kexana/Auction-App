@@ -28,9 +28,13 @@ namespace AuctionApp.Areas.Administration.Controllers
             return View(auctionItemDto);
         }
         [HttpPost("Edit/{id}")]
-        public async Task<IActionResult> Edit(long id, AuctionItemDto auuctionItemDto)
+        public async Task<IActionResult> Edit(long id, AuctionItemDto auctionItemDto)
         {
-            await auctionItemService.UpdateAuctionItem(id, auuctionItemDto);
+            if (auctionItemDto.currentBid < auctionItemDto.startingBid)
+            {
+                auctionItemDto.currentBid = auctionItemDto.startingBid;
+            }
+            await auctionItemService.UpdateAuctionItem(id, auctionItemDto);
 
             return Redirect("/Administration/Home/ItemsIndex");
         }

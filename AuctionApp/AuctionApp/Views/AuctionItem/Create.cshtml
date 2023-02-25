@@ -3,10 +3,10 @@
 }
 <div class="container mt-4">
     <h1>Create Auction Item</h1>
-    <form method="post" name="Create" onsubmit="return validateForm()">
+    <form method="post" name="Create">
         <div class="form-group">
             <label for="name">Name:</label>
-            <input type="text" class="form-control" id="itemName" name="ItemName">
+            <input type="text" class="form-control" id="itemName" name="ItemName" required>
         </div>
         <div>
             <div class="mb-4 d-flex justify-content-center">
@@ -21,11 +21,11 @@
         </div>
         <div class="form-group">
             <label for="ItemImages">Image URLS</label>
-            <input type="text" class="form-control" id="ItemImages" name="ItemImages" onchange="ImagePreview()" />
+            <input type="text" class="form-control" id="ItemImages" name="ItemImages" onchange="ImagePreview()" required/>
         </div>
         <div class="form-group">
             <label for="description">Description:</label>
-            <textarea class="form-control" id="itemDescription" name="ItemDescription" rows="3"></textarea>
+            <textarea class="form-control" id="itemDescription" name="ItemDescription" rows="3" required></textarea>
         </div>
         <div class="form-group">
             <label for="ItemTags">Product tags:</label>
@@ -33,22 +33,33 @@
         </div>
         <div class="form-group">
             <label for="startingBid">Starting Bid:</label>
-            <input type="number" class="form-control" id="startingBid" name="StartingBid">
+            <input type="number" class="form-control" id="startingBid" name="StartingBid" required>
         </div>
         <div class="form-group">
             <label for="itemEndDte">Date the bid ends:</label>
-            <input type="date" class="form-control" id="itemEndDate" name="ItemEndDate"value="">
-        </div>
-        <div>
-            <label id="alert"></label>
+            <input type="date" class="form-control" id="itemEndDate" name="ItemEndDate"value="" required>
         </div>
         <button type="submit" class="btn btn-primary">Create</button>
-    </form>
-    <form onsubmit="return validateForm()">
-        <button type="submit" class="btn btn-primary" id="test">TEst</button>
+        @if (!ViewContext.ViewData.ModelState.IsValid)
+                {
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach (var error in ViewContext.ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                            {
+                                <li>@error.ErrorMessage</li>
+                            }
+                        </ul>
+                    </div>
+                }
     </form>
 </div>
-
+<script>
+    function ImagePreview() {
+        var placeholder = document.getElementById("placeholder");
+        var imageUrl = document.getElementById("ItemImages");
+        placeholder.src = imageUrl.value;
+    }
+</script>
 <style>
     #alert{
         color:crimson;
@@ -93,24 +104,6 @@
     }
 
 </style>
-<script>
-   function validateForm() {
-      let name = document.forms["Create"]["ItemName"].value;
-      let decription = document.forms["Create"]["ItemDescription"].value;
-      let bid = document.forms["Create"]["StartingBid"].value;
-      let alert = document.getElementById("alert");
-        if (name == "" || description == "" || bid == "") {
-            alert.innerHTML="Enter all fields";
-            return false;
-        }
-}
-   function ImagePreview(){
-        var placeholder = document.getElementById("placeholder");
-        var imageUrl = document.getElementById("ItemImages");
-       placeholder.src = imageUrl.value; 
-       console.log("joj");
-   }
-</script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

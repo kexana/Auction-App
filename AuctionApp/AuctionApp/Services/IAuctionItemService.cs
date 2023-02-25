@@ -13,8 +13,12 @@ namespace AuctionApp.Services
 
         Task<AuctionItemDto> GetAuctionItemById(long id);
 
+        IQueryable<AuctionItemDto> GetAllAuctionItemsByUserId(string userId);
+
         Task<AuctionItemDto> UpdateAuctionItem(long id, AuctionItemDto auctionItemDto);
 
         Task<AuctionItemDto> DeleteAuctionItem(long id);
+
+        Task<AuctionItemDto> PlaceBid(long itemId, decimal bid, AuctionUser auctionUser);
     }
 }

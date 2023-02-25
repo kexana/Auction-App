@@ -22,7 +22,13 @@
 <nav class="shortcuts">
     <div class="d-flex">
         <ul class="">
-            <li><a class="nav-link" href="#saved">Saved</a></li>
+            <li>
+                @if (SignInManager.IsSignedIn(User)) {
+                    <a class="nav-link" >Saved</a>
+                }else{
+                    <a class="nav-link" asp-area="Users" asp-page="/Account/Login">Saved</a>
+                }
+            </li>
             <li><a class="nav-link" href="#category">Electronics</a></li>
             <li><a class="nav-link" href="#category">Motors</a></li>
             <li><a class="nav-link" href="#category">Fashion</a></li>
@@ -63,7 +69,7 @@
                                                 <h4>@item.itemName</h4>
                                                 <p class="item-price"><span>@item.currentBid</span></p>
                                                 <label for="timeRemaining"> Time remining: </label>
-                                                <p id="timeRemaining"><span>3d 14h 5m</span></p>
+                                                <p id="timeRemaining"><span>@string.Format("{0}d {1}h {2}m", ((TimeSpan)(item.itemEndDate - DateTime.Now)).Days, ((TimeSpan)(item.itemEndDate - DateTime.Now)).Hours, ((TimeSpan)(item.itemEndDate - DateTime.Now)).Minutes)</span></p>
                                                 <a asp-controller="AuctionItem" asp-action="AuctionPage" asp-route-itemId="@item.Id" class="btn btn-primary">Make a bid</a>
                                             </div>
                                         </div>
