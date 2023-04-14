@@ -4,7 +4,7 @@
 
 namespace AuctionApp.Migrations
 {
-    public partial class sqlservertest : Migration
+    public partial class bidsinauctionItem : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

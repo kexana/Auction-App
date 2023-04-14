@@ -30,9 +30,9 @@ namespace AuctionApp.Areas.Administration.Controllers
         [HttpPost("Edit/{id}")]
         public async Task<IActionResult> Edit(long id, AuctionItemDto auctionItemDto)
         {
-            if (auctionItemDto.currentBid < auctionItemDto.startingBid)
+            if (auctionItemDto.Bids.Last().BidAmount < auctionItemDto.Bids.First().BidAmount)
             {
-                auctionItemDto.currentBid = auctionItemDto.startingBid;
+                auctionItemDto.Bids.Last().BidAmount = auctionItemDto.Bids.First().BidAmount;
             }
             await auctionItemService.UpdateAuctionItem(id, auctionItemDto);
 

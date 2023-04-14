@@ -19,8 +19,8 @@
         </div>
 
         <div class="form-group">
-            <label asp-for="startingBid" class="control-label">Starting Bid</label>
-            <p>@Model.startingBid</p>
+            <label asp-for="Bids.First().BidAmount" class="control-label">Starting Bid</label>
+            <p>@Model.Bids.First().BidAmount</p>
         </div>
 
         <div class="form-group">

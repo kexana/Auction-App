@@ -11,7 +11,7 @@
         <div class="card-body">
             <h2 class="card-title">@Model.itemName</h2>
             <p class="card-text">@Model.itemDescription</p>
-            <p class="card-text">Starting Bid: @Model.startingBid</p>
+            <p class="card-text">Starting Bid: @Model.Bids.First().BidAmount</p>
         </div>
     </div>
 

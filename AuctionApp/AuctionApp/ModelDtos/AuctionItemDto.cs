@@ -14,9 +14,7 @@ namespace AuctionApp.ModelDtos
 
         public string ItemTags { get; set; }
 
-        public decimal startingBid { get; set; }
-
-        public decimal currentBid { get; set; }
+        public List<AuctionBidDto> Bids { get; set; }
 
         public DateTime? itemActivatedDate { get; set; }
 

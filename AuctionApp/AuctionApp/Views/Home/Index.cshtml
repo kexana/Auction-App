@@ -67,7 +67,7 @@
                                             </div>
                                             <div class="thumb-content">
                                                 <h4>@item.itemName</h4>
-                                                <p class="item-price"><span>@item.currentBid</span></p>
+                                                <p class="item-price"><span>@item.Bids.LastOrDefault().BidAmount</span></p>
                                                 <label for="timeRemaining"> Time remining: </label>
                                                 <p id="timeRemaining"><span>@string.Format("{0}d {1}h {2}m", ((TimeSpan)(item.itemEndDate - DateTime.Now)).Days, ((TimeSpan)(item.itemEndDate - DateTime.Now)).Hours, ((TimeSpan)(item.itemEndDate - DateTime.Now)).Minutes)</span></p>
                                                 <a asp-controller="AuctionItem" asp-action="AuctionPage" asp-route-itemId="@item.Id" class="btn btn-primary">Make a bid</a>

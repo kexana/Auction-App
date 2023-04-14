@@ -21,6 +21,8 @@ namespace AuctionApp.Web
 
             // Forum Services
             builder.Services.AddTransient<IAuctionItemService, AuctionItemService>();
+            builder.Services.AddTransient<IAuctionBidService, AuctionBidService>();
+            builder.Services.AddTransient<IAuctionFeedbackService, AuctionFeedbackService>();
 
             //builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 

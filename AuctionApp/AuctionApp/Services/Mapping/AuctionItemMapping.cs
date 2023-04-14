@@ -13,21 +13,22 @@ namespace AuctionApp.Services.Mapping
                 Id = auctionItemDto.Id,
                 itemName = auctionItemDto.itemName,
                 itemDescription = auctionItemDto.itemDescription,
-                ItemImages= auctionItemDto.ItemImages,
-                ItemTags= auctionItemDto.ItemTags,
+                ItemImages = auctionItemDto.ItemImages,
+                ItemTags = auctionItemDto.ItemTags,
                 itemActivatedDate = auctionItemDto.itemActivatedDate,
                 itemEndDate = auctionItemDto.itemEndDate,
                 isActive = auctionItemDto.isActive,
-                startingBid = auctionItemDto.startingBid,
-                currentBid = auctionItemDto.currentBid,
-                buyerUserId= auctionItemDto.buyerUserId,
-                sellerUserId= auctionItemDto.sellerUserId,
+                buyerUserId = auctionItemDto.buyerUserId,
+                sellerUserId = auctionItemDto.sellerUserId,
+                Bids = true ? auctionItemDto.Bids?.Select(bid => bid.ToEntity()).ToList():null,
             };
         }
 
         public static AuctionItemDto ToDto(
             this AuctionItemModel auctionItem,
-            bool fetchUser = true)
+            bool fetchUser = true,
+            bool fetchBids = true
+            )
         {
             return new AuctionItemDto
             {
@@ -39,8 +40,7 @@ namespace AuctionApp.Services.Mapping
                 itemActivatedDate = auctionItem.itemActivatedDate,
                 itemEndDate = auctionItem.itemEndDate,
                 isActive = auctionItem.isActive,
-                startingBid = auctionItem.startingBid,
-                currentBid = auctionItem.currentBid,
+                Bids = fetchBids ? auctionItem.Bids?.Select(bid => bid.ToDto()).ToList():null,
                 sellerUserId = auctionItem.sellerUserId,
                 buyerUserId = auctionItem.buyerUserId,
                 sellerUser = fetchUser ? auctionItem.sellerUser?.ToDto():null,

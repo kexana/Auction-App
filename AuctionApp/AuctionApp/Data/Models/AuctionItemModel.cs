@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
 
 namespace AuctionApp.Data.Models
@@ -12,12 +13,9 @@ namespace AuctionApp.Data.Models
 
         public string ItemImages  { get; set; }
 
+        public ICollection<AuctionBid> Bids { get; set; }
         [AllowNull]
         public string ItemTags { get; set; }
-
-        public decimal startingBid { get; set; }
-
-        public decimal currentBid { get; set; }
 
         public DateTime? itemActivatedDate { get; set; }
 
@@ -25,16 +23,19 @@ namespace AuctionApp.Data.Models
 
         public bool isActive { get; set; }
 
+        [ForeignKey("sellerUser")]
         [AllowNull]
         public string sellerUserId { get; set; }
 
         [AllowNull]
         public AuctionUser sellerUser { get; set; }
 
+        [ForeignKey("buyerUser")]
         [AllowNull]
         public string? buyerUserId { get; set; }
 
         [AllowNull]
         public AuctionUser? buyerUser { get; set; }
+
     }
 }
