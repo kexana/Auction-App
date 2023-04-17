@@ -5,7 +5,7 @@ namespace AuctionApp.Services
 {
     public interface IAuctionFeedbackService
     {
-        Task<AuctionFeedbackDto> CreateAuctionFeedback(AuctionFeedbackDto auctionFeedbackDto, AuctionUser auctionUser);
+        Task<AuctionFeedbackDto> CreateAuctionFeedback(AuctionFeedbackDto auctionFeedbackDto, AuctionUser auctionUser, AuctionItemModel auctionItem);
 
         IQueryable<AuctionFeedbackDto> GetAllAuctionFeedback(bool fetchDeleted = false);
 
@@ -16,5 +16,7 @@ namespace AuctionApp.Services
         Task<AuctionFeedbackDto> UpdateAuctionFeedback(long id, AuctionFeedbackDto auctionFeedbackDto);
 
         Task<AuctionFeedbackDto> DeleteAuctionFeedback(long id);
+
+        decimal CalculateRatingForSeller(string userId);
     }
 }

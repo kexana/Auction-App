@@ -15,7 +15,7 @@
                 <div class="card-body">
                     <p><strong>Email:</strong> @Model.AuctionUser.Email</p>
                     <p><strong>Username:</strong> @Model.AuctionUser.UserName</p>
-                    <p><strong>Seller rating:</strong> TODO</p>
+                    <p><strong>Seller rating:</strong> @Model.starRating</p>
                 </div>
             </div>
         </div>
@@ -43,6 +43,19 @@
         }
     </div>
     <h1>Seller Feedback</h1>
+    @foreach (var feedback in Model.AuctionFeedback)
+    {
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="thumb-content">
+                        <p class="item-price"><span>@feedback.FeedbackText</span></p>
+                        <p>star rating: @feedback.Rating</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
     <hr>
     <hr>
 </div>

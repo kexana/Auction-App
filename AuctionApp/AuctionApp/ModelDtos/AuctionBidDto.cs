@@ -8,7 +8,7 @@ namespace AuctionApp.ModelDtos
         public int Id { get; set; }
 
         public int ItemId { get; set; }
-        public AuctionItemModel Item { get; set; }
+        public AuctionItemDto Item { get; set; }
 
         public string BidderId { get; set; }
 

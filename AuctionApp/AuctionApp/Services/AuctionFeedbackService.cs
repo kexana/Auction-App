@@ -20,12 +20,13 @@ namespace AuctionApp.Services
             this.auctionDbContext = auctionDbContext;
         }
 
-        public async Task<AuctionFeedbackDto> CreateAuctionFeedback(AuctionFeedbackDto auctionFeedbackDto, AuctionUser auctionUser)
+        public async Task<AuctionFeedbackDto> CreateAuctionFeedback(AuctionFeedbackDto auctionFeedbackDto, AuctionUser auctionUser, AuctionItemModel auctionItem)
         {
 
             AuctionFeedback auctionFeedback = auctionFeedbackDto.ToEntity();
 
             auctionFeedback.Reviewer = auctionUser;
+            auctionFeedback.ItemId = auctionItem.Id;
 
             await this.auctionDbContext.AuctionFeedback.AddAsync(auctionFeedback);
             await this.auctionDbContext.SaveChangesAsync();
@@ -61,6 +62,7 @@ namespace AuctionApp.Services
         {
             AuctionFeedback auctionFeedback = await this.auctionDbContext.AuctionFeedback
                .Include(feedback => feedback.Reviewer)
+               .Include(feedback => feedback.Item)
                .SingleOrDefaultAsync(feedback => feedback.Id == id);
 
             if (auctionFeedback == null)
@@ -77,7 +79,10 @@ namespace AuctionApp.Services
         {
             IQueryable<AuctionFeedback> auctionFeedback = auctionDbContext.AuctionFeedback;
 
-            return auctionFeedback.Select(x=>x.ToDto(true,true));//.Where(feedback => feedback.Item.sellerUserId == userId).Select(feedback => feedback.ToDto(true,true));
+            return auctionFeedback
+                .Select(x=>x.ToDto(true,true))
+                .Where(feedback => feedback.Item.sellerUserId == userId)
+                .Include(feedback => feedback.Item);
         }
 
         public async Task<AuctionFeedbackDto> UpdateAuctionFeedback(long id, AuctionFeedbackDto auctionFeedbackDto)
@@ -98,6 +103,10 @@ namespace AuctionApp.Services
             await this.auctionDbContext.SaveChangesAsync();
 
             return auctionFeedback.ToDto();
+        }
+        public decimal CalculateRatingForSeller(string userId)
+        {
+            return Queryable.Average(GetAllAuctionFeedbackBySellerId(userId).Select(f => (decimal)f.Rating).ToList().AsQueryable());
         }
     }
 }

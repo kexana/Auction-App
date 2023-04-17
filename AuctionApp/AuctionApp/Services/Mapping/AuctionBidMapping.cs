@@ -20,7 +20,8 @@ namespace AuctionApp.Services.Mapping
         }
         public static AuctionBidDto ToDto(
             this AuctionBid auctionBid,
-            bool fetchUser = true)
+            bool fetchUser = true,
+            bool fetchItem = true)
         {
             return new AuctionBidDto
             {
@@ -29,6 +30,7 @@ namespace AuctionApp.Services.Mapping
                 BidAmount = auctionBid.BidAmount,
                 BidderId = auctionBid.BidderId,
                 ItemId = auctionBid.ItemId,
+                Item = fetchItem ? auctionBid.Item?.ToDto(fetchBids: false) : null,
                 Bidder = fetchUser ? auctionBid.Bidder?.ToDto() : null,
             };
         }
