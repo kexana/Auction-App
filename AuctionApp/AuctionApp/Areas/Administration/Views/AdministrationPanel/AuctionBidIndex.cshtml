@@ -1,0 +1,50 @@
+﻿@model AdministrationPanelModel
+
+@{
+    ViewData["Title"] = "AuctionBidIndex";
+}
+
+<h1>AuctionBidIndex</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Item Id
+            </th>
+            <th>
+                Bidder Id
+            </th>
+            <th>
+                Bid Amount
+            </th>
+            <th>
+                Date Made
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var bid in Model.Bids)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelBid => bid.ItemId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelBid => bid.BidderId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelBid => bid.BidAmount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelBid => bid.DateMade)
+                </td>
+                <td>
+                    <a asp-controller="AuctionBidAdministration" asp-action="Edit" asp-route-id="@bid.Id">Edit</a>
+                    <a asp-controller="AuctionBidAdministration" asp-action="Details" asp-route-id="@bid.Id">Details</a>
+                    <a asp-controller="AuctionBidAdministration" asp-action="Delete" asp-route-id="@bid.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

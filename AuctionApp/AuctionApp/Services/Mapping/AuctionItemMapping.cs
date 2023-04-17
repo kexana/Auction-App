@@ -40,7 +40,7 @@ namespace AuctionApp.Services.Mapping
                 itemActivatedDate = auctionItem.itemActivatedDate,
                 itemEndDate = auctionItem.itemEndDate,
                 isActive = auctionItem.isActive,
-                Bids = fetchBids ? auctionItem.Bids?.Select(bid => bid.ToDto()).ToList():null,
+                Bids = fetchBids ? auctionItem.Bids?.Select(bid => bid.ToDto(fetchItem: false)).ToList():null,
                 sellerUserId = auctionItem.sellerUserId,
                 buyerUserId = auctionItem.buyerUserId,
                 sellerUser = fetchUser ? auctionItem.sellerUser?.ToDto():null,

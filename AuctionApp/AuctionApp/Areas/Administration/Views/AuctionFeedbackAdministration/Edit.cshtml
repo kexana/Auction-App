@@ -1,0 +1,27 @@
+﻿@model AuctionFeedbackDto
+@{
+    ViewData["Title"] = "Edit Auction Feedback";
+}
+
+<div class="container my-4">
+    <h1>@ViewData["Title"]</h1>
+    <hr />
+
+    <form asp-controller="AuctionFeedbackAdministration" asp-action="Edit" method="post">
+        <div class="form-group">
+            <label asp-for="FeedbackText" class="control-label">Feedback Text</label>
+            <input asp-for="FeedbackText" class="form-control" />
+            <span asp-validation-for="FeedbackText" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Rating" class="control-label">Rating</label>
+            <textarea asp-for="Rating" class="form-control"></textarea>
+            <span asp-validation-for="Rating" class="text-danger"></span>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

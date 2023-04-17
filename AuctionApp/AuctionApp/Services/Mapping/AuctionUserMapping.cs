@@ -15,13 +15,17 @@ namespace AuctionApp.Services.Mapping
             };
         }
 
-        public static AuctionUserDto ToDto(this AuctionUser auctionUser)
+        public static AuctionUserDto ToDto(
+            this AuctionUser auctionUser,
+            bool fetchFeedback = true
+            )
         {
             return new AuctionUserDto
             {
                 Id = auctionUser.Id,
                 UserName = auctionUser.UserName,
-                Email = auctionUser.Email
+                Email = auctionUser.Email,
+                Feedback = fetchFeedback ? auctionUser.Feedback?.Select(feedback => feedback.ToDto(fetchUser: false)).ToList() : null,
             };
         }
     }

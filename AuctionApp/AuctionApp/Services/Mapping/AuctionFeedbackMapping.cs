@@ -29,8 +29,8 @@ namespace AuctionApp.Services.Mapping
                 FeedbackText = auctionFeedback.FeedbackText,
                 ItemId = auctionFeedback.ItemId,
                 ReviewerId = auctionFeedback.ReviewerId,
-                Reviewer = fetchUser ? auctionFeedback.Reviewer?.ToDto() : null,
-                //Item = fetchItem ? auctionFeedback.Item?.ToDto() : null,
+                Reviewer = fetchUser ? auctionFeedback.Reviewer?.ToDto(fetchFeedback: false) : null,
+                Item = fetchItem ? auctionFeedback.Item?.ToDto(fetchUser:false) : null,
             };
         }
     }
