@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.SqlServer;
 using AuctionApp.Seed;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace AuctionApp.Web
 {
@@ -23,6 +25,8 @@ namespace AuctionApp.Web
             builder.Services.AddTransient<IAuctionItemService, AuctionItemService>();
             builder.Services.AddTransient<IAuctionBidService, AuctionBidService>();
             builder.Services.AddTransient<IAuctionFeedbackService, AuctionFeedbackService>();
+           // builder.Services.AddHostedService<ConsumeScopedServiceHostedService>();
+           // builder.Services.AddScoped<IAuctionTimeLogicService,AuctionTimeLogicService>();
 
             //builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 

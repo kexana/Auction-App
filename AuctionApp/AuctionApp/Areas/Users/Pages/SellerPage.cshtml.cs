@@ -37,7 +37,7 @@ namespace AuctionApp.Areas.Users.Pages
             }
 
             // Get auction items created by current user
-            IQueryable<AuctionItemDto> auctionItems = _auctionItemService.GetAllAuctionItemsByUserId(user.Id);
+            IQueryable<AuctionItemDto> auctionItems = await _auctionItemService.GetAllAuctionItemsByUserId(user.Id);
             IQueryable<AuctionFeedbackDto> feedback = _auctionFeedbackService.GetAllAuctionFeedbackBySellerId(user.Id);
             starRating = _auctionFeedbackService.CalculateRatingForSeller(user.Id);
 
