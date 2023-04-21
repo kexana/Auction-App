@@ -14,18 +14,23 @@ namespace AuctionApp.Services
     public class AuctionTimeLogicService : IAuctionTimeLogicService
     {
         private Timer _timer;
+        private readonly ILogger<AuctionTimeLogicService> _logger;
         private AuctionItemService _itemService;
         private AuctionAppDbContext auctionAppDbContext;
 
-        public AuctionTimeLogicService(AuctionAppDbContext auctionAppDbContext)
+        public AuctionTimeLogicService(AuctionAppDbContext auctionAppDbContext, ILogger<AuctionTimeLogicService> logger)
         {
-            _timer = new Timer(EndAuctionManage, null, TimeSpan.Zero, TimeSpan.FromMinutes(1));
+            _logger = logger;
             this.auctionAppDbContext= auctionAppDbContext;
             this._itemService = new AuctionItemService(auctionAppDbContext);
         }
 
         public Task StartAsync(CancellationToken stoppingToken)
         {
+            _logger.LogInformation("Timed Hosted Service running.");
+
+            _timer = new Timer(EndAuctionManage, null, TimeSpan.Zero, TimeSpan.FromMinutes(1));
+
             return Task.CompletedTask;
         }
 
@@ -56,6 +61,7 @@ namespace AuctionApp.Services
         public Task StopAsync(CancellationToken stoppingToken)
         {
             _timer?.Change(Timeout.Infinite, 0);
+            _logger.LogInformation("Timed Hosted Service is stopping.");
             return Task.CompletedTask;
         }
 
