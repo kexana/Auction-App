@@ -80,15 +80,15 @@ namespace AuctionApp.Services
             IQueryable<AuctionFeedback> auctionFeedback = auctionDbContext.AuctionFeedback;
 
             return auctionFeedback
-                .Select(x=>x.ToDto(true,true))
                 .Where(feedback => feedback.Item.sellerUserId == userId)
-                .Include(feedback => feedback.Item);
+                .Include(feedback => feedback.Item)
+                .Include(feedback => feedback.Reviewer)
+                .Select(x => x.ToDto(true, true));
         }
 
         public async Task<AuctionFeedbackDto> UpdateAuctionFeedback(long id, AuctionFeedbackDto auctionFeedbackDto)
         {
-            AuctionFeedback auctionFeedback = await this.auctionDbContext
-                .AuctionFeedback
+            AuctionFeedback auctionFeedback = await this.auctionDbContext.AuctionFeedback
                 .SingleOrDefaultAsync(feedback => feedback.Id == id);
 
             if (auctionFeedback == null)
@@ -106,7 +106,16 @@ namespace AuctionApp.Services
         }
         public decimal CalculateRatingForSeller(string userId)
         {
-            return Queryable.Average(GetAllAuctionFeedbackBySellerId(userId).Select(f => (decimal)f.Rating).ToList().AsQueryable());
+            IQueryable<AuctionFeedbackDto> feedback = GetAllAuctionFeedbackBySellerId(userId);
+
+            if (feedback.Any())
+            {
+                return Queryable.Average(feedback.Select(f => (decimal)f.Rating).ToList().AsQueryable());
+            }
+            else
+            {
+                return 0;
+            }
         }
     }
 }

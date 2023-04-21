@@ -69,6 +69,13 @@ namespace AuctionApp.Services
             return auctionItems.Where(item => item.isActive).OrderByDescending(item => item.itemActivatedDate).Select(item => item.ToDto(true, true));
         }
 
+        public IQueryable<AuctionItemModel> GetActiveAuctionItems(bool fetchDeleted = false)
+        {
+            IQueryable<AuctionItemModel> auctionItems = auctionDbContext.AuctionItems.Include(x => x.Bids);
+
+            return auctionItems.Where(item => item.isActive);
+        }
+
         public async Task<AuctionItemDto> GetAuctionItemById(long id)
         {
             AuctionItemModel auctionItem = await this.auctionDbContext.AuctionItems
@@ -87,11 +94,24 @@ namespace AuctionApp.Services
             return auctionItemDto;
         }
 
-        public IQueryable<AuctionItemDto> GetAllAuctionItemsByUserId(string userId)
+        public async Task<IQueryable<AuctionItemDto>> GetAllAuctionItemsByUserId(string userId)
         {
             IQueryable<AuctionItemModel> auctionItems = auctionDbContext.AuctionItems.Include(x=>x.Bids);
 
-            return auctionItems.Where(item => item.isActive && item.sellerUserId==userId).OrderByDescending(item => item.itemActivatedDate).Select(item => item.ToDto(true, true));
+            return auctionItems
+                .Where(item => item.isActive && item.sellerUserId==userId)
+                .OrderByDescending(item => item.itemActivatedDate)
+                .Select(item => item.ToDto(true, true));
+        }
+
+        public async Task<IQueryable<AuctionItemDto>> GetAllAuctionItemsByBidderId(string userId)
+        {
+            IQueryable<AuctionItemModel> auctionItems = auctionDbContext.AuctionItems.Include(x => x.Bids);
+
+            return auctionItems
+                .Where(item => item.Bids.OrderBy(b => b.BidAmount).Last().BidderId == userId)
+                .OrderByDescending(item => item.itemActivatedDate)
+                .Select(item => item.ToDto(true, true));
         }
 
         public async Task<AuctionItemDto> UpdateAuctionItem(long id, AuctionItemDto auctionItemDto)

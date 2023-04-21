@@ -34,22 +34,22 @@ namespace AuctionApp.Controllers
         }
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> Create(string userId, long itemId)
+        public async Task<IActionResult> Create(long itemId)
         {
             if (signInManager.IsSignedIn(User))
             {
-                AuctionUser sellerUser = await userManager.FindByIdAsync(userId);
                 AuctionItemDto item = await auctionItemService.GetAuctionItemById(itemId);
-                ViewBag.item = item;
-                return View(sellerUser.ToDto());
+                return View(item);
             }
             return Redirect("/");
         }
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Create(AuctionFeedbackDto feedbackDto, string userId, long itemId) {
+        public async Task<IActionResult> Create(AuctionFeedbackDto feedbackDto,long itemId) {
 
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             AuctionUser sellerUser = await userManager.FindByIdAsync(userId);
+
             AuctionItemDto item = await auctionItemService.GetAuctionItemById(itemId);
             await auctionFeedbackService.CreateAuctionFeedback(feedbackDto,sellerUser,item.ToEntity());
 
