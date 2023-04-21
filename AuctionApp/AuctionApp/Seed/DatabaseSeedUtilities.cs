@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace AuctionApp.Seed
 {
     public static class DatabaseSeedUtilities

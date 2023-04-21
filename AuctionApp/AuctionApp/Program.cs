@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.SqlServer;
 using AuctionApp.Seed;
+
+using AuctionApp.Hubs;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 
@@ -43,7 +45,7 @@ namespace AuctionApp.Web
 
             builder.Services.AddRazorPages();
             builder.Services.AddHttpContextAccessor();
-
+            builder.Services.AddSignalR();
 
         }
 
@@ -86,7 +88,7 @@ namespace AuctionApp.Web
                   pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
                 );
             });
-
+            app.MapHub<ChatHub>("/Chat");
             app.Run();
         }
 

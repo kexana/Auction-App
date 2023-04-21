@@ -4,6 +4,7 @@ using AuctionApp.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AuctionApp.Migrations
 {
     [DbContext(typeof(AuctionAppDbContext))]
-    partial class AuctionAppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230420141916_h1")]
+    partial class h1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -132,34 +134,6 @@ namespace AuctionApp.Migrations
                     b.ToTable("AuctionItems");
                 });
 
-            modelBuilder.Entity("AuctionApp.Data.Models.AuctionMessage", b =>
-                {
-                    b.Property<int>("MessageId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MessageId"), 1L, 1);
-
-                    b.Property<int>("ChatId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("MessageSent")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("SenderIsReceiver")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("TextMessage")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("MessageId");
-
-                    b.HasIndex("ChatId");
-
-                    b.ToTable("AuctionMessage");
-                });
-
             modelBuilder.Entity("AuctionApp.Data.Models.AuctionUser", b =>
                 {
                     b.Property<string>("Id")
@@ -223,37 +197,6 @@ namespace AuctionApp.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-                });
-
-            modelBuilder.Entity("AuctionApp.Data.Models.Chat", b =>
-                {
-                    b.Property<int>("ChatId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ChatId"), 1L, 1);
-
-                    b.Property<int>("ReceiverId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ReceiverId1")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("SenderId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("SenderId1")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("ChatId");
-
-                    b.HasIndex("ReceiverId1");
-
-                    b.HasIndex("SenderId1");
-
-                    b.ToTable("Chat");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -444,36 +387,6 @@ namespace AuctionApp.Migrations
                     b.Navigation("sellerUser");
                 });
 
-            modelBuilder.Entity("AuctionApp.Data.Models.AuctionMessage", b =>
-                {
-                    b.HasOne("AuctionApp.Data.Models.Chat", "Chat")
-                        .WithMany("Messages")
-                        .HasForeignKey("ChatId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Chat");
-                });
-
-            modelBuilder.Entity("AuctionApp.Data.Models.Chat", b =>
-                {
-                    b.HasOne("AuctionApp.Data.Models.AuctionUser", "Receiver")
-                        .WithMany("ReceivedChats")
-                        .HasForeignKey("ReceiverId1")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("AuctionApp.Data.Models.AuctionUser", "Sender")
-                        .WithMany("SentChats")
-                        .HasForeignKey("SenderId1")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Receiver");
-
-                    b.Navigation("Sender");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -533,15 +446,6 @@ namespace AuctionApp.Migrations
             modelBuilder.Entity("AuctionApp.Data.Models.AuctionUser", b =>
                 {
                     b.Navigation("Feedback");
-
-                    b.Navigation("ReceivedChats");
-
-                    b.Navigation("SentChats");
-                });
-
-            modelBuilder.Entity("AuctionApp.Data.Models.Chat", b =>
-                {
-                    b.Navigation("Messages");
                 });
 #pragma warning restore 612, 618
         }
