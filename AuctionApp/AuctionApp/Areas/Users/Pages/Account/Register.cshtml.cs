@@ -65,6 +65,8 @@ namespace AuctionApp.Areas.Users.Pages.Account
 
                 // Custom properties
                 user.Email = Input.Email;
+                user.RecievedMessages = new List<AuctionPrivateMessage>();
+                user.SentMessages = new List<AuctionPrivateMessage>();
 
                 await _userStore.SetUserNameAsync(user, Input.Username, CancellationToken.None);
                 var result = await _userManager.CreateAsync(user, Input.Password);

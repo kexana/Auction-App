@@ -17,7 +17,8 @@ namespace AuctionApp.Services.Mapping
 
         public static AuctionUserDto ToDto(
             this AuctionUser auctionUser,
-            bool fetchFeedback = true
+            bool fetchFeedback = true,
+            bool fetchMessages =true
             )
         {
             return new AuctionUserDto
@@ -26,6 +27,8 @@ namespace AuctionApp.Services.Mapping
                 UserName = auctionUser.UserName,
                 Email = auctionUser.Email,
                 Feedback = fetchFeedback ? auctionUser.Feedback?.Select(feedback => feedback.ToDto(fetchUser: false)).ToList() : null,
+                RecievedMessages = fetchMessages ? auctionUser.RecievedMessages.Select(message => message.ToDto(fetchUser: false)).ToList() : null,
+                SentMessages = fetchMessages ? auctionUser.SentMessages.Select(message => message.ToDto(fetchUser: false)).ToList() : null, 
             };
         }
     }

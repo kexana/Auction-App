@@ -19,6 +19,11 @@
             <textarea asp-for="Rating" class="form-control"></textarea>
             <span asp-validation-for="Rating" class="text-danger"></span>
         </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Save</button>
+            <a asp-controller="AdministrationPanel" asp-action="AuctionFeedbackIndex" asp-route-id="@Model.Id" class="btn btn-secondary">Cancel</a>
+        </div>
     </form>
 </div>
 

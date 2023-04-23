@@ -11,7 +11,7 @@ using System.Xml.Linq;
 
 namespace AuctionApp.Services
 {
-    public interface IAuctionTimeLogicService : IHostedService, IDisposable 
+    public interface IAuctionTimeLogicService : IHostedService, IDisposable
     {
         Task StartAsync(CancellationToken stoppingToken);
 

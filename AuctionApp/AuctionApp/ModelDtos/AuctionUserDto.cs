@@ -1,4 +1,6 @@
-﻿namespace AuctionApp.ModelDtos
+﻿using AuctionApp.Data.Models;
+
+namespace AuctionApp.ModelDtos
 {
     public class AuctionUserDto
     {
@@ -9,6 +11,10 @@
         public string Email { get; set; }
 
         public ICollection<AuctionFeedbackDto> Feedback { get; set; }
+
+        public ICollection<AuctionPrivateMessageDto> SentMessages { get; set; }
+
+        public ICollection<AuctionPrivateMessageDto> RecievedMessages { get; set; }
 
     }
 }

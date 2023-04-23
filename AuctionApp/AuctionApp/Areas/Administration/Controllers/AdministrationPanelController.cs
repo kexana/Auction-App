@@ -52,7 +52,7 @@ namespace AuctionApp.Areas.Administration.Controllers
         {
             return View(new AdministrationPanelModel
             {
-                Users = this.dbContext.Users.Select(user => user.ToDto(true)).ToList(),
+                Users = this.dbContext.Users.Select(user => user.ToDto(true,true)).ToList(),
             });
         }
     }

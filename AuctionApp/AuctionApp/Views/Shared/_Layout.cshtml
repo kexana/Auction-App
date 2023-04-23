@@ -26,7 +26,9 @@
                             <li class="nav-bar-right"><a class="nav-link" asp-area="Users" asp-page="/AccountPage">My shop</a></li>
                             <li class="nav-bar-right"><a class="nav-link" href="#watchlist">Watchlist</a></li>
                             <li class ="nav-bar-right"><a class="nav-link" asp-controller="AuctionItem" asp-action="Create">Sell</a></li>
-                            <li class="nav-bar-right"><a class="nav-link" href="#ship">Ship to</a></li>
+                            <li class="nav-bar-right">
+                                <a class="nav-link" asp-area="Users" asp-page="/ChatSelectPage" asp-route-userId="@User.FindFirstValue(ClaimTypes.NameIdentifier)">Private Messages</a>
+                            </li>
                         }
                         else
                         {
@@ -34,7 +36,7 @@
                             <li class="nav-bar-right"><a class="nav-link" asp-area="Users" asp-page="/Account/Login">My shop</a></li>
                             <li class="nav-bar-right"><a class="nav-link" asp-area="Users" asp-page="/Account/Login">Watchlist</a></li>
                             <li class="nav-bar-right"><a class="nav-link" asp-area="Users" asp-page="/Account/Login">Sell</a></li>
-                            <li class="nav-bar-right"><a class="nav-link" asp-area="Users" asp-page="/Account/Login">Ship to</a></li>
+                            <li class="nav-bar-right"><a class="nav-link" asp-area="Users" asp-page="/Account/Login">Private Messages</a></li>
                         }
 
                     </div>

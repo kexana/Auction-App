@@ -10,6 +10,7 @@ namespace AuctionApp.Data
         public DbSet<AuctionItemModel> AuctionItems { get; set; }
         public DbSet<AuctionBid> AuctionBids { get; set; }
         public DbSet<AuctionFeedback> AuctionFeedback { get; set; }
+        public DbSet<AuctionPrivateMessage> AuctionPrivateMessages { get; set; }
         public AuctionAppDbContext (DbContextOptions<AuctionAppDbContext> options) : base(options)
         {}
 
@@ -30,7 +31,27 @@ namespace AuctionApp.Data
             modelBuilder.Entity<AuctionUser>()
                 .HasMany(a => a.Feedback)
                 .WithOne(b => b.Reviewer)
-                .OnDelete(DeleteBehavior.Restrict); 
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<AuctionUser>()
+                .HasMany(a => a.SentMessages)
+                .WithOne(b => b.Sender)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<AuctionUser>()
+                .HasMany(a => a.RecievedMessages)
+                .WithOne(b => b.Recepiant)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<AuctionPrivateMessage>()
+                .HasOne(a => a.Sender)
+                .WithMany(b => b.SentMessages)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<AuctionPrivateMessage>()
+                .HasOne(a => a.Recepiant)
+                .WithMany(b => b.RecievedMessages)
+                .OnDelete(DeleteBehavior.Restrict);
 
             base.OnModelCreating(modelBuilder);
         }

@@ -43,8 +43,8 @@ namespace AuctionApp.Services.Mapping
                 Bids = fetchBids ? auctionItem.Bids?.Select(bid => bid.ToDto(fetchItem: false, fetchUser: false)).ToList():null,
                 sellerUserId = auctionItem.sellerUserId,
                 buyerUserId = auctionItem.buyerUserId,
-                sellerUser = fetchUser ? auctionItem.sellerUser?.ToDto():null,
-                buyerUser = fetchUser ? auctionItem.buyerUser?.ToDto():null,
+                sellerUser = fetchUser ? auctionItem.sellerUser?.ToDto(fetchFeedback:false, fetchMessages:false):null,
+                buyerUser = fetchUser ? auctionItem.buyerUser?.ToDto(fetchFeedback: false, fetchMessages: false) :null,
             };
         }
     }

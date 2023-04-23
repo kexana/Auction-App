@@ -17,13 +17,16 @@ namespace AuctionApp.Tests
         private AuctionAppDbContext context;
         private AuctionBidService bidService;
 
-        [SetUp]
+        private static DbContextOptions<AuctionAppDbContext> options = new DbContextOptionsBuilder<AuctionAppDbContext>()
+            .UseInMemoryDatabase("TestDb").Options;
+
+        [OneTimeSetUp]
         public void Setup()
         {
-            var options = new DbContextOptionsBuilder<AuctionAppDbContext>()
-                .UseInMemoryDatabase("TestDb").Options;
 
             this.context = new AuctionAppDbContext(options);
+            this.context.Database.EnsureCreated();
+
             bidService = new AuctionBidService(this.context);
         }
 

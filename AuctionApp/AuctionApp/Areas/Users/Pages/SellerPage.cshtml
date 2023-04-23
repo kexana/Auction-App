@@ -1,6 +1,9 @@
 ﻿@page
+@using AuctionApp.Data.Models;
 @model AuctionApp.Areas.Users.Pages.SellerPageModel
+@inject SignInManager<AuctionUser> SignInManager;
 @{
+
 }
 
 <div class="container-fluid">
@@ -16,6 +19,12 @@
                     <p><strong>Email:</strong> @Model.AuctionUser.Email</p>
                     <p><strong>Username:</strong> @Model.AuctionUser.UserName</p>
                     <p><strong>Seller rating:</strong> @Model.starRating</p>
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                        <a class="btn btn-primary" asp-area="Users" asp-page="/PrivateMessagePage" asp-route-userId="@Model.AuctionUser.Id">Private Message User</a>
+                    }else{
+                        <a class="btn btn-primary" asp-area="Users" asp-page="/Account/Login">Private Message User</a>
+                    }
                 </div>
             </div>
         </div>

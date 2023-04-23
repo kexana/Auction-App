@@ -25,8 +25,8 @@ namespace AuctionApp.Web
             builder.Services.AddTransient<IAuctionItemService, AuctionItemService>();
             builder.Services.AddTransient<IAuctionBidService, AuctionBidService>();
             builder.Services.AddTransient<IAuctionFeedbackService, AuctionFeedbackService>();
-           // builder.Services.AddHostedService<ConsumeScopedServiceHostedService>();
-           // builder.Services.AddScoped<IAuctionTimeLogicService,AuctionTimeLogicService>();
+            builder.Services.AddTransient<IAuctionPrivateMessageService, AuctionPrivateMessageService>();
+            //builder.Services.AddHostedService<AuctionTimeLogicService>();
 
             //builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
