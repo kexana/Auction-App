@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using Microsoft.EntityFrameworkCore;
 
 namespace AuctionApp.Areas.Users.Pages
 {
@@ -32,9 +33,15 @@ namespace AuctionApp.Areas.Users.Pages
             if (recepiantUser == null)
             {
                 return NotFound();
-            }    
+            }
 
-            IQueryable<AuctionPrivateMessageDto> pms = auctionPMService.GetAllAuctionPrivateMessagesByRecepiantId(userId);
+            var senderId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            AuctionUser senderUser = await userManager.Users
+                .Include(u => u.SentMessages)
+                .Include(u => u.RecievedMessages)
+                .FirstOrDefaultAsync(u => u.Id == senderId);
+
+            IQueryable<AuctionPrivateMessageDto> pms = auctionPMService.GetAllAuctionPrivateMessagesBetweenSenderAndRecepiant(senderId, userId);
 
             // Build account view model
             this.RecepiantUser = recepiantUser;
@@ -44,10 +51,16 @@ namespace AuctionApp.Areas.Users.Pages
         }
         public async Task<IActionResult> OnPostAsync(AuctionPrivateMessageDto pmDto, string userId)
         {
-            AuctionUser recepiantUser = await userManager.FindByIdAsync(userId);
+            AuctionUser recepiantUser = await userManager.Users
+                .Include(u=>u.SentMessages)
+                .Include(u=>u.RecievedMessages)
+                .FirstOrDefaultAsync(u=>u.Id==userId);
 
             var senderId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            AuctionUser senderUser = await userManager.FindByIdAsync(senderId);
+            AuctionUser senderUser = await userManager.Users
+                .Include(u => u.SentMessages)
+                .Include(u => u.RecievedMessages)
+                .FirstOrDefaultAsync(u => u.Id == senderId);
 
             if (recepiantUser == null || senderId == null)
             {
@@ -58,20 +71,9 @@ namespace AuctionApp.Areas.Users.Pages
                 pmDto.Attachment = "empty";
             }
 
-            if(senderUser.SentMessages==null)
-            {
-                senderUser.SentMessages = new List<AuctionPrivateMessage>();
-                await userManager.UpdateAsync(senderUser);
-            }
-            if (recepiantUser.RecievedMessages==null)
-            {
-                recepiantUser.RecievedMessages = new List<AuctionPrivateMessage>();
-                await userManager.UpdateAsync(recepiantUser);
-            }
-
             await auctionPMService.CreateAuctionPrivateMessage(pmDto,senderUser,recepiantUser);
 
-            IQueryable<AuctionPrivateMessageDto> pms = auctionPMService.GetAllAuctionPrivateMessagesByRecepiantId(userId);
+            IQueryable<AuctionPrivateMessageDto> pms = auctionPMService.GetAllAuctionPrivateMessagesBetweenSenderAndRecepiant(senderId,userId);
 
             // Build account view model
             this.RecepiantUser = recepiantUser;

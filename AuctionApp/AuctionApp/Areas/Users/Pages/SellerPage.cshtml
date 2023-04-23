@@ -21,7 +21,10 @@
                     <p><strong>Seller rating:</strong> @Model.starRating</p>
                     @if (SignInManager.IsSignedIn(User))
                     {
-                        <a class="btn btn-primary" asp-area="Users" asp-page="/PrivateMessagePage" asp-route-userId="@Model.AuctionUser.Id">Private Message User</a>
+                        @if (Model.AuctionUser.Id != User.FindFirstValue(ClaimTypes.NameIdentifier))
+                        {
+                            <a class="btn btn-primary" asp-area="Users" asp-page="/PrivateMessagePage" asp-route-userId="@Model.AuctionUser.Id">Private Message User</a>
+                        }
                     }else{
                         <a class="btn btn-primary" asp-area="Users" asp-page="/Account/Login">Private Message User</a>
                     }

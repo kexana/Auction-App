@@ -26,33 +26,36 @@
                 <h5 class="text-muted">Ends in:</h5>
                 <h4>@string.Format("{0}d {1}h {2}m", ((TimeSpan)(Model.itemEndDate - DateTime.Now)).Days, ((TimeSpan)(Model.itemEndDate - DateTime.Now)).Hours, ((TimeSpan)(Model.itemEndDate - DateTime.Now)).Minutes)</h4>
             </div>
-            <form method="post" asp-controller="AuctionItem" asp-action="PlaceBid" asp-route-itemId="@Model.Id" asp-route-bid="">
-                <input type="hidden" name="productId" value="@Model.Id" />
-                <div class="form-group">
-                    <label for="bidAmount">Bid Amount:</label>
-                    <input type="number" class="form-control" name="bid" id="bid" min="@Model.Bids.Last().BidAmount + 1" step="1" required value="@Model.Bids.Last().BidAmount+1" />
-                </div>
-                @if (SignInManager.IsSignedIn(User))
-                {
-                    <button type="submit" class="btn btn-primary">Place Bid</button>
-                    <a class="btn btn-primary" asp-controller="Feedback" asp-action="Create" asp-route-userId="@Model.sellerUser.Id" asp-route-itemId="@Model.Id"> Give Feedback</a>
-                }
-                else
-                {
-                    <a class="btn btn-primary" asp-area="Users" asp-page="/Account/Login">Place Bid</a>
-                }
-                @if (!ViewContext.ViewData.ModelState.IsValid)
-                {
-                    <div class="alert alert-danger">
-                        <ul>
-                            @foreach (var error in ViewContext.ViewData.ModelState.Values.SelectMany(v => v.Errors))
-                            {
-                                <li>@error.ErrorMessage</li>
-                            }
-                        </ul>
+            @if (Model.sellerUserId != User.FindFirstValue(ClaimTypes.NameIdentifier))
+            {
+                <form method="post" asp-controller="AuctionItem" asp-action="PlaceBid" asp-route-itemId="@Model.Id" asp-route-bid="">
+                    <input type="hidden" name="productId" value="@Model.Id" />
+                    <div class="form-group">
+                        <label for="bidAmount">Bid Amount:</label>
+                        <input type="number" class="form-control" name="bid" id="bid" min="@Model.Bids.Last().BidAmount + 1" step="1" required value="@Model.Bids.Last().BidAmount+1" />
+                    </div>
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                        <button type="submit" class="btn btn-primary">Place Bid</button>
+                        <a class="btn btn-primary" asp-controller="Feedback" asp-action="Create" asp-route-userId="@Model.sellerUser.Id" asp-route-itemId="@Model.Id"> Give Feedback</a>
+                    }
+                    else
+                    {
+                        <a class="btn btn-primary" asp-area="Users" asp-page="/Account/Login">Place Bid</a>
+                    }
+                    @if (!ViewContext.ViewData.ModelState.IsValid)
+                    {
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach (var error in ViewContext.ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                                {
+                                    <li>@error.ErrorMessage</li>
+                                }
+                            </ul>
                     </div>
                 }
-            </form>
+                </form>
+            }
         </div>
     </div>
 </div>

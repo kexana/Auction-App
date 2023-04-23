@@ -6,6 +6,7 @@ using AuctionApp.Services.Mapping;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Protocol.Plugins;
 using System;
 using System.Xml.Linq;
 
@@ -94,18 +95,22 @@ namespace AuctionApp.Services
             IQueryable<AuctionPrivateMessage> auctionPM = auctionDbContext.AuctionPrivateMessages;
 
             return auctionPM
-                .Where(pm => pm.Sender.Id == senderId || pm.Sender.Id == recepiantId)
+                .Where(pm => (pm.Sender.Id == senderId && pm.Recepiant.Id == recepiantId) || (pm.Sender.Id == recepiantId && pm.Recepiant.Id == senderId))
                 .Include(pm => pm.Recepiant)
                 .Include(pm => pm.Sender)
-                .OrderByDescending(pm => pm.PostedDate)
+                .OrderBy(pm => pm.PostedDate)
                 .Select(x => x.ToDto(true));
         }
 
         public IQueryable<AuctionUserDto> GetAllAuctionUserWithCorrespondance(string senderId)
         {
-            IQueryable<AuctionUserDto> auctionUsers = auctionDbContext.AuctionPrivateMessages.Where(pm => pm.SenderId == senderId).Select(pm => pm.Recepiant.ToDto(true,true));
+            IQueryable<AuctionPrivateMessage> Pms = auctionDbContext.AuctionPrivateMessages.Where(pm => pm.SenderId == senderId || pm.RecepiantId == senderId);
 
-            return auctionUsers;
+            IQueryable<AuctionUserDto> res = Pms
+                .Select(u => u.SenderId == senderId ? u.Recepiant.ToDto(false, false) : u.Sender.ToDto(false, false));
+
+            //TODO: Way to distinct res by user
+            return res;
         }
 
         public async Task<AuctionPrivateMessageDto> GetAuctionPrivateMessageById(long id)
