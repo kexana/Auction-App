@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace AuctionApp.Migrations
 {
-    public partial class firsttrails : Migration
+    public partial class Initialize : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -162,12 +162,12 @@ namespace AuctionApp.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     itemName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     itemDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    startingBid = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    currentBid = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    ItemImages = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ItemTags = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     itemActivatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     itemEndDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     isActive = table.Column<bool>(type: "bit", nullable: false),
-                    sellerUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    sellerUserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     buyerUserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
@@ -182,7 +182,64 @@ namespace AuctionApp.Migrations
                         name: "FK_AuctionItems_AspNetUsers_sellerUserId",
                         column: x => x.sellerUserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AuctionBids",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    BidderId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    BidAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    DateMade = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ItemId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AuctionBids", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AuctionBids_AspNetUsers_BidderId",
+                        column: x => x.BidderId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AuctionBids_AuctionItems_ItemId",
+                        column: x => x.ItemId,
+                        principalTable: "AuctionItems",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AuctionFeedback",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Rating = table.Column<int>(type: "int", nullable: false),
+                    FeedbackText = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ReviewerId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ItemId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AuctionFeedback", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AuctionFeedback_AspNetUsers_ReviewerId",
+                        column: x => x.ReviewerId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_AuctionFeedback_AuctionItems_ItemId",
+                        column: x => x.ItemId,
+                        principalTable: "AuctionItems",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -225,6 +282,26 @@ namespace AuctionApp.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_AuctionBids_BidderId",
+                table: "AuctionBids",
+                column: "BidderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AuctionBids_ItemId",
+                table: "AuctionBids",
+                column: "ItemId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AuctionFeedback_ItemId",
+                table: "AuctionFeedback",
+                column: "ItemId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AuctionFeedback_ReviewerId",
+                table: "AuctionFeedback",
+                column: "ReviewerId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_AuctionItems_buyerUserId",
                 table: "AuctionItems",
                 column: "buyerUserId");
@@ -253,10 +330,16 @@ namespace AuctionApp.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "AuctionItems");
+                name: "AuctionBids");
+
+            migrationBuilder.DropTable(
+                name: "AuctionFeedback");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "AuctionItems");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

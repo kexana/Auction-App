@@ -1,0 +1,23 @@
+﻿@model AuctionFeedbackDto
+@{
+    ViewData["Title"] = "Details";
+}
+
+<div class="container my-4">
+    <h1>@ViewData["Title"]</h1>
+    <hr />
+
+    <div class="card">
+        <div class="card-body">
+            <h2 class="card-title">@Model.Item.itemName</h2>
+            <p class="card-text">@Model.FeedbackText</p>
+            <p class="card-text">Rating: @Model.Rating</p>
+            <p class="card-text">Written by: @Model.Reviewer.UserName</p>
+        </div>
+    </div>
+
+    <div class="my-4">
+        <a asp-controller="AuctionFeedbackAdministration" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+        <a asp-controller="AdministrationPanel" asp-action="AuctionFeedbackIndex" class="btn btn-secondary">Back to List</a>
+    </div>
+</div>

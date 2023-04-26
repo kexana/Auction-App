@@ -1,0 +1,22 @@
+﻿@model AuctionBidDto
+@{
+    ViewData["Title"] = "Details";
+}
+
+<div class="container my-4">
+    <h1>@ViewData["Title"]</h1>
+    <hr />
+
+    <div class="card">
+        <div class="card-body">
+            <h2 class="card-title">@Model.Item.itemName</h2>
+            <p class="card-text">Made by user: @Model.Bidder.UserName</p>
+            <p class="card-text">Bid Amount: @Model.BidAmount</p>
+        </div>
+    </div>
+
+    <div class="my-4">
+        <a asp-controller="AuctionBidAdministration" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+        <a asp-controller="AdministrationPanel" asp-action="AuctionBidIndex" class="btn btn-secondary">Back to List</a>
+    </div>
+</div>

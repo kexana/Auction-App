@@ -23,7 +23,6 @@ namespace AuctionApp.Services
         public async Task<AuctionItemDto> CreateAuctionItem(AuctionItemDto auctionItemDto, AuctionUser auctionUser)
         {
             auctionItemDto.isActive= true;
-            auctionItemDto.currentBid = auctionItemDto.startingBid;
             auctionItemDto.itemActivatedDate = DateTime.Now;
             auctionItemDto.buyerUserId = null;
 
@@ -31,6 +30,7 @@ namespace AuctionApp.Services
 
             auctionItem.sellerUser = auctionUser;
             auctionItem.buyerUser = null;
+            auctionItem.Bids = new List<AuctionBid>();
 
             await this.auctionDbContext.AuctionItems.AddAsync(auctionItem);
             await this.auctionDbContext.SaveChangesAsync();
@@ -57,16 +57,23 @@ namespace AuctionApp.Services
 
         public IQueryable<AuctionItemDto> GetAllAuctionItems(bool fetchDeleted = false)
         {
-            IQueryable<AuctionItemModel> auctionItems = auctionDbContext.AuctionItems;
+            IQueryable<AuctionItemModel> auctionItems = auctionDbContext.AuctionItems.Include(x=>x.Bids);
 
-            return auctionItems.Select(item=>item.ToDto(true));
+            return auctionItems.Select(item=>item.ToDto(true,true));
         }
 
         public IQueryable<AuctionItemDto> GetFilteredAuctionItems(bool fetchDeleted = false)
         {
-            IQueryable<AuctionItemModel> auctionItems = auctionDbContext.AuctionItems;
+            IQueryable<AuctionItemModel> auctionItems = auctionDbContext.AuctionItems.Include(x => x.Bids);
 
-            return auctionItems.Where(item => item.isActive).OrderByDescending(item => item.itemActivatedDate).Select(item => item.ToDto(true));
+            return auctionItems.Where(item => item.isActive).OrderByDescending(item => item.itemActivatedDate).Select(item => item.ToDto(true, true));
+        }
+
+        public IQueryable<AuctionItemModel> GetActiveAuctionItems(bool fetchDeleted = false)
+        {
+            IQueryable<AuctionItemModel> auctionItems = auctionDbContext.AuctionItems.Include(x => x.Bids);
+
+            return auctionItems.Where(item => item.isActive);
         }
 
         public async Task<AuctionItemDto> GetAuctionItemById(long id)
@@ -74,6 +81,7 @@ namespace AuctionApp.Services
             AuctionItemModel auctionItem = await this.auctionDbContext.AuctionItems
                .Include(item => item.sellerUser)
                .Include(item => item.buyerUser )
+               .Include(item => item.Bids )
                .SingleOrDefaultAsync(item => item.Id == id);
 
             if (auctionItem == null)
@@ -86,11 +94,30 @@ namespace AuctionApp.Services
             return auctionItemDto;
         }
 
-        public IQueryable<AuctionItemDto> GetAllAuctionItemsByUserId(string userId)
+        public async Task<IQueryable<AuctionItemDto>> GetAllAuctionItemsByUserId(string userId)
         {
-            IQueryable<AuctionItemModel> auctionItems = auctionDbContext.AuctionItems;
+            IQueryable<AuctionItemModel> auctionItems = auctionDbContext.AuctionItems.Include(x=>x.Bids);
 
-            return auctionItems.Where(item => item.isActive && item.sellerUserId==userId).OrderByDescending(item => item.itemActivatedDate).Select(item => item.ToDto(true));
+            return auctionItems
+                .Where(item => item.isActive && item.sellerUserId==userId)
+                .OrderByDescending(item => item.itemActivatedDate)
+                .Select(item => item.ToDto(true, true));
+        }
+
+        public IQueryable<AuctionItemDto> GetAuctionItemsByName(string name)
+        {
+            IQueryable<AuctionItemModel> auctionItems = auctionDbContext.AuctionItems.Include(x => x.Bids);
+            return auctionItems.Where(item => item.itemName == name).OrderByDescending(item => item.itemActivatedDate).Select(item => item.ToDto(true, true));
+        }
+
+        public async Task<IQueryable<AuctionItemDto>> GetAllAuctionItemsByBidderId(string userId)
+        {
+            IQueryable<AuctionItemModel> auctionItems = auctionDbContext.AuctionItems.Include(x => x.Bids);
+
+            return auctionItems
+                .Where(item => item.Bids.OrderBy(b => b.BidAmount).Last().BidderId == userId)
+                .OrderByDescending(item => item.itemActivatedDate)
+                .Select(item => item.ToDto(true, true));
         }
 
         public async Task<AuctionItemDto> UpdateAuctionItem(long id, AuctionItemDto auctionItemDto)
@@ -107,7 +134,10 @@ namespace AuctionApp.Services
             auctionItem.itemName = auctionItemDto.itemName;
             auctionItem.itemDescription = auctionItemDto.itemDescription;
             auctionItem.isActive = auctionItemDto.isActive;
-            auctionItem.currentBid = auctionItemDto.currentBid;
+            foreach (AuctionBid bid in auctionItem.Bids)
+            {
+                auctionItemDto.Bids[bid.Id]=bid.ToDto(true);
+            }
 
             this.auctionDbContext.Update(auctionItem);
             await this.auctionDbContext.SaveChangesAsync();
@@ -126,13 +156,21 @@ namespace AuctionApp.Services
                 throw new ArgumentException("The item you are trying to update does not exist.");
             }
 
-            auctionItem.currentBid = bid;
+            AuctionBid newBid = new AuctionBid();
+            newBid.BidAmount = bid;
+            newBid.DateMade = DateTime.Now;
+            newBid.Bidder = auctionUser;
+            newBid.BidderId = auctionUser.Id;
+            newBid.ItemId = (int)itemId;
+
+            auctionItem.Bids.Add(newBid);
             auctionItem.buyerUser = auctionUser;
             auctionItem.buyerUserId = auctionUser.Id;
 
             try
             {
                 this.auctionDbContext.Update(auctionItem);
+                this.auctionDbContext.AuctionBids.Add(newBid);
                 await this.auctionDbContext.SaveChangesAsync();
             }
             catch (Exception ex)

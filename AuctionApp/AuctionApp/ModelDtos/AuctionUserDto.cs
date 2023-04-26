@@ -8,5 +8,7 @@
 
         public string Email { get; set; }
 
+        public ICollection<AuctionFeedbackDto> Feedback { get; set; }
+
     }
 }

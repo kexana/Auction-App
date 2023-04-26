@@ -1,0 +1,24 @@
+﻿@model AuctionItemDto
+
+<h1>Leave Feedback for @Model.sellerUser.UserName</h1>
+
+<form method="post" name="Create" asp-for-itemId="@Model.Id">
+    <div class="form-group">
+        <label for="rating">@Model.itemName</label>
+        <label for="rating">Rating:</label>
+        <select class="form-control" id="Rating" name="Rating">
+            <option value="5">5 Stars</option>
+            <option value="4">4 Stars</option>
+            <option value="3">3 Stars</option>
+            <option value="2">2 Stars</option>
+            <option value="1">1 Star</option>
+        </select>
+    </div>
+    
+    <div class="form-group">
+        <label for="FeedbackText">Description:</label>
+        <textarea class="form-control" id="FeedbackText" name="FeedbackText" rows="5"></textarea>
+    </div>
+    
+    <button type="submit" class="btn btn-primary">Submit Feedback</button>
+</form>

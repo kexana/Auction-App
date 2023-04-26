@@ -15,11 +15,11 @@
             <div class="d-flex justify-content-between">
                 <div>
                     <h5 class="text-muted">Starting Bid:</h5>
-                    <h4>@Model.startingBid</h4>
+                    <h4>@Model.Bids.First().BidAmount</h4>
                 </div>
                 <div>
                     <h5 class="text-muted">Current Bid:</h5>
-                    <h4>@Model.currentBid</h4>
+                    <h4>@Model.Bids.Last().BidAmount</h4>
                 </div>
             </div>
             <div>
@@ -30,11 +30,12 @@
                 <input type="hidden" name="productId" value="@Model.Id" />
                 <div class="form-group">
                     <label for="bidAmount">Bid Amount:</label>
-                    <input type="number" class="form-control" name="bid" id="bid" min="@Model.currentBid + 1" step="1" required value="@Model.currentBid+1" />
+                    <input type="number" class="form-control" name="bid" id="bid" min="@Model.Bids.Last().BidAmount + 1" step="1" required value="@Model.Bids.Last().BidAmount+1" />
                 </div>
                 @if (SignInManager.IsSignedIn(User))
                 {
                     <button type="submit" class="btn btn-primary">Place Bid</button>
+                    <a class="btn btn-primary" asp-controller="Feedback" asp-action="Create" asp-route-userId="@Model.sellerUser.Id" asp-route-itemId="@Model.Id"> Give Feedback</a>
                 }
                 else
                 {

@@ -21,9 +21,9 @@
         </div>
 
         <div class="form-group">
-            <label asp-for="startingBid" class="control-label">Starting Bid</label>
-            <input asp-for="startingBid" class="form-control" />
-            <span asp-validation-for="startingBid" class="text-danger"></span>
+            <label asp-for="Bids.First().BidAmount" class="control-label">Starting Bid</label>
+            <input asp-for="Bids.First().BidAmount" class="form-control" />
+            <span asp-validation-for="Bids.First().BidAmount" class="text-danger"></span>
         </div>
 
         <div class="form-group">

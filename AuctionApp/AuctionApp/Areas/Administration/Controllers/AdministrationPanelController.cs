@@ -12,11 +12,15 @@ namespace AuctionApp.Areas.Administration.Controllers
     public class AdministrationPanelController : BaseAdministrationController
     {
         private readonly IAuctionItemService auctionItemService;
+        private readonly IAuctionBidService auctionBidService;
+        private readonly IAuctionFeedbackService auctionFeedbackService;
         private readonly AuctionAppDbContext dbContext;
 
-        public AdministrationPanelController(IAuctionItemService auctionItemService, AuctionAppDbContext dbContext)
+        public AdministrationPanelController(IAuctionItemService auctionItemService, IAuctionBidService auctionBidService, IAuctionFeedbackService auctionFeedbackService, AuctionAppDbContext dbContext)
         {
             this.auctionItemService = auctionItemService;
+            this.auctionBidService= auctionBidService;
+            this.auctionFeedbackService= auctionFeedbackService;
             this.dbContext = dbContext;
         }
         [HttpGet("ItemsIndex")]
@@ -27,12 +31,28 @@ namespace AuctionApp.Areas.Administration.Controllers
                 Items = this.auctionItemService.GetAllAuctionItems(true).ToList(),
             });
         }
+        [HttpGet("BidsIndex")]
+        public IActionResult AuctionBidIndex()
+        {
+            return View(new AdministrationPanelModel
+            {
+                Bids = this.auctionBidService.GetAllAuctionBids(true).ToList(),
+            });
+        }
+        [HttpGet("FeedbackIndex")]
+        public IActionResult AuctionFeedbackIndex()
+        {
+            return View(new AdministrationPanelModel
+            {
+                Feedback = this.auctionFeedbackService.GetAllAuctionFeedback(true).ToList(),
+            });
+        }
         [HttpGet("Users")]
         public IActionResult UserIndex()
         {
             return View(new AdministrationPanelModel
             {
-                Users = this.dbContext.Users.Select(user => user.ToDto()).ToList(),
+                Users = this.dbContext.Users.Select(user => user.ToDto(true)).ToList(),
             });
         }
     }

@@ -9,20 +9,23 @@ using System.Security.Claims;
 using AuctionApp.Services.Mapping;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.Security.Cryptography;
+using Microsoft.EntityFrameworkCore;
 
 namespace AuctionApp.Controllers
 {
     public class AuctionItemController : BaseUserController
     {
         private readonly IAuctionItemService auctionItemService;
+        private readonly IAuctionBidService auctionBidService;
         private readonly SignInManager<AuctionUser> signInManager;
         private readonly UserManager<AuctionUser> userManager;
 
-        public AuctionItemController(IAuctionItemService auctionItemService, SignInManager<AuctionUser> signInManager, UserManager<AuctionUser> userManager)
+        public AuctionItemController(IAuctionItemService auctionItemService, SignInManager<AuctionUser> signInManager, UserManager<AuctionUser> userManager, IAuctionBidService auctionBidService)
         {
             this.auctionItemService = auctionItemService;
             this.signInManager = signInManager;
             this.userManager = userManager;
+            this.auctionBidService= auctionBidService;
         }
         [HttpGet]
         public IActionResult AuctionItemIndex()
@@ -48,7 +51,7 @@ namespace AuctionApp.Controllers
         }
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Create(AuctionItemDto auctionItemDto)
+        public async Task<IActionResult> Create(AuctionItemDto auctionItemDto, decimal startingBid)
         {
             List <string> errors = new List<string>();
             if (auctionItemDto.itemEndDate < (DateTime.Now.AddDays(1)))
@@ -59,7 +62,7 @@ namespace AuctionApp.Controllers
             {
                 errors.Add("Enter description.");
             }
-            if(auctionItemDto.startingBid == null)
+            if(startingBid == null)
             {
                 errors.Add("Enter starting bid.");
             }
@@ -71,7 +74,7 @@ namespace AuctionApp.Controllers
             {
                 errors.Add("Enter iamge url.");
             }
-            if (auctionItemDto.startingBid <=0)
+            if (startingBid <= 0)
             {
                 errors.Add("Enter a valid starting bid");
             }
@@ -81,7 +84,9 @@ namespace AuctionApp.Controllers
             }
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             AuctionUser auctionUser = await userManager.FindByIdAsync(userId);
-            await auctionItemService.CreateAuctionItem(auctionItemDto, auctionUser);
+
+            auctionItemDto = await auctionItemService.CreateAuctionItem(auctionItemDto, auctionUser);
+            await auctionItemService.PlaceBid(auctionItemDto.Id, startingBid, auctionUser);
 
             return Redirect("/");
         }
@@ -139,7 +144,7 @@ namespace AuctionApp.Controllers
             if (signInManager.IsSignedIn(User))
             {
                 AuctionItemDto auctionItem = await auctionItemService.GetAuctionItemById(itemId);
-                if (bid <= auctionItem.currentBid)
+                if (bid <= auctionItem.Bids.Last().BidAmount)
                 {
                     TempData["Error"] = new List<string> { "Bid amount must be greater than current price." };
                 }
@@ -147,7 +152,7 @@ namespace AuctionApp.Controllers
                 {
                     var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                     AuctionUser auctionUser = await userManager.FindByIdAsync(userId);
-                    auctionItemService.PlaceBid(itemId, bid,auctionUser);
+                    await auctionItemService.PlaceBid(itemId, bid,auctionUser);
                 }
                 return RedirectToAction(nameof(AuctionPage),new{itemId = itemId});
             }

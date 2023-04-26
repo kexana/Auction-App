@@ -24,7 +24,13 @@ namespace AuctionApp.Controllers
             trendingItems = _auctionItemService.GetFilteredAuctionItems();
             return View(trendingItems);
         }
-
+        [HttpPost]
+        public IActionResult Index(string? search)
+        {
+            IEnumerable<AuctionItemDto> trendingItems = new List<AuctionItemDto>();
+            trendingItems = _auctionItemService.GetAuctionItemsByName(search);
+            return View(trendingItems);
+        }
         public IActionResult Privacy()
         {
             return View();

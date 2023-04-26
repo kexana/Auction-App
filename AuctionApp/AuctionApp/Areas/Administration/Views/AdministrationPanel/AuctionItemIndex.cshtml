@@ -47,10 +47,10 @@
                     @Html.DisplayFor(modelItem => item.itemDescription)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.startingBid)
+                    @Html.DisplayFor(modelItem => item.Bids.First().BidAmount)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.currentBid)
+                    @Html.DisplayFor(modelItem => item.Bids.Last().BidAmount)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.itemActivatedDate)

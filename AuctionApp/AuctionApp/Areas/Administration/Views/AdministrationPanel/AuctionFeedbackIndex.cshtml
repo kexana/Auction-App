@@ -1,0 +1,50 @@
+﻿@model AdministrationPanelModel
+
+@{
+    ViewData["Title"] = "AuctionFeedbackIndex";
+}
+
+<h1>AuctionFeedbackIndex</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Item Id
+            </th>
+            <th>
+                Reviewer Id
+            </th>
+            <th>
+                Rating
+            </th>
+            <th>
+                Feedback Text
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var feedback in Model.Feedback)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelFeedback => feedback.ItemId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelFeedback => feedback.ReviewerId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelFeedback => feedback.Rating)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelFeedback => feedback.FeedbackText)
+                </td>
+                <td>
+                    <a asp-controller="AuctionFeedbackAdministration" asp-action="Edit" asp-route-id="@feedback.Id">Edit</a>
+                    <a asp-controller="AuctionFeedbackAdministration" asp-action="Details" asp-route-id="@feedback.Id">Details</a>
+                    <a asp-controller="AuctionFeedbackAdministration" asp-action="Delete" asp-route-id="@feedback.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

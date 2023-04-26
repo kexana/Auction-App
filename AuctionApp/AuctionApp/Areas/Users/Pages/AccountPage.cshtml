@@ -15,7 +15,7 @@
                 <div class="card-body">
                     <p><strong>Email:</strong> @Model.AuctionUser.Email</p>
                     <p><strong>Username:</strong> @Model.AuctionUser.UserName</p>
-                    <p><strong>Seller rating:</strong> TODO</p>
+                    <p><strong>Seller rating:</strong> @Model.starRating</p>
                 </div>
             </div>
         </div>
@@ -32,7 +32,7 @@
                     <div class="card-body">
                         <div class="thumb-content">
                             <h4>@item.itemName</h4>
-                            <p class="item-price"><span>Highest bid: @item.currentBid</span></p>
+                            <p class="item-price"><span>Highest bid: @item.Bids.Last().BidAmount</span></p>
                             <label for="timeRemaining"> Time remining: </label>
                             <p id="timeRemaining"><span>@string.Format("{0}d {1}h {2}m", ((TimeSpan)(item.itemEndDate - DateTime.Now)).Days, ((TimeSpan)(item.itemEndDate - DateTime.Now)).Hours, ((TimeSpan)(item.itemEndDate - DateTime.Now)).Minutes)</span></p>
                             <a asp-controller="AuctionItem" asp-action="AuctionPage" asp-route-itemId="@item.Id" class="btn btn-primary">View auction</a>
@@ -42,7 +42,51 @@
             </div>
         }
     </div>
+    <hr>
     <h1>Seller Feedback</h1>
+    @foreach (var feedback in Model.AuctionFeedback)
+    {
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="thumb-content">
+                        <p class="item-price"><span>@feedback.FeedbackText</span></p>
+                        <p>star rating: @feedback.Rating</p>
+                        <p>left by user: 
+                            <a asp-area="Users" asp-page="/SellerPage" asp-route-userId="@feedback.ReviewerId">@feedback.Reviewer.UserName</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    <hr>
+    <h1>Bid on Items</h1>
+    @foreach (var item in Model.BidOnItems)
+    {
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <img class="card-img-top" src="@item.ItemImages" alt="@item.itemName">
+                <div class="card-body">
+                    @if (item.isActive)
+                    {
+                        <p>Active</p>
+                    }
+                    else
+                    {
+                        <p>Bought</p>
+                    }
+                    <div class="thumb-content">
+                        <h4>@item.itemName</h4>
+                        <p class="item-price"><span>Highest bid: @item.Bids.Last().BidAmount</span></p>
+                        <label for="timeRemaining"> Time remining: </label>
+                        <p id="timeRemaining"><span>@string.Format("{0}d {1}h {2}m", ((TimeSpan)(item.itemEndDate - DateTime.Now)).Days, ((TimeSpan)(item.itemEndDate - DateTime.Now)).Hours, ((TimeSpan)(item.itemEndDate - DateTime.Now)).Minutes)</span></p>
+                        <a asp-controller="AuctionItem" asp-action="AuctionPage" asp-route-itemId="@item.Id" class="btn btn-primary">View auction</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
     <hr>
     <hr>
 </div>
