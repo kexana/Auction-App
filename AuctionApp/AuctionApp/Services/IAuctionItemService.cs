@@ -24,5 +24,6 @@ namespace AuctionApp.Services
         Task<AuctionItemDto> DeleteAuctionItem(long id);
 
         Task<AuctionItemDto> PlaceBid(long itemId, decimal bid, AuctionUser auctionUser);
+        IQueryable<AuctionItemDto> GetAuctionItemsByName(string name);
     }
 }

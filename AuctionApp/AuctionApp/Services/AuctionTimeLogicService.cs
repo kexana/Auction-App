@@ -6,7 +6,6 @@ using AuctionApp.Services.Mapping;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Xml.Linq;
 
@@ -16,20 +15,20 @@ namespace AuctionApp.Services
     {
         private Timer _timer;
         private readonly ILogger<AuctionTimeLogicService> _logger;
-        private IAuctionItemService _itemService;
-        private IServiceScopeFactory serviceScopeFactory;
+        private AuctionItemService _itemService;
+        private AuctionAppDbContext auctionAppDbContext;
 
-        public AuctionTimeLogicService(ILogger<AuctionTimeLogicService> logger, IServiceScopeFactory scopeFactory)
+        public AuctionTimeLogicService(AuctionAppDbContext auctionAppDbContext, ILogger<AuctionTimeLogicService> logger)
         {
             _logger = logger;
-            this.serviceScopeFactory = scopeFactory;
+            this.auctionAppDbContext= auctionAppDbContext;
+            this._itemService = new AuctionItemService(auctionAppDbContext);
         }
 
         public Task StartAsync(CancellationToken stoppingToken)
         {
             _logger.LogInformation("Timed Hosted Service running.");
 
-            //_timer = new Timer(async o =>await EndAuctionManage(o), null, TimeSpan.Zero, TimeSpan.FromMinutes(1));
             _timer = new Timer(EndAuctionManage, null, TimeSpan.Zero, TimeSpan.FromMinutes(1));
 
             return Task.CompletedTask;
@@ -37,22 +36,18 @@ namespace AuctionApp.Services
 
         public void EndAuctionManage(object state)
         {
-            using (var scope = serviceScopeFactory.CreateScope())
-            {
-                //auctionAppDbContext = scope.ServiceProvider.GetService<AuctionAppDbContext>();
-                this._itemService = scope.ServiceProvider.GetService<IAuctionItemService>();
-            }
-
+            // Check if any auctions have ended
             IQueryable<AuctionItemModel> auctions = _itemService.GetActiveAuctionItems();
             var now = DateTime.UtcNow;
             foreach (var auction in auctions)
             {
                 if (auction.itemEndDate < now)
                 {
+                    // Auction has ended, determine the winner and perform any other actions
                     AuctionUser winner = DetermineWinner(auction);
                     auction.isActive = false;
-                    //auctionAppDbContext.Update(auction);
-                    //auctionAppDbContext.SaveChanges();
+                    auctionAppDbContext.Update(auction);
+                    auctionAppDbContext.SaveChanges();
                 }
             }
         }

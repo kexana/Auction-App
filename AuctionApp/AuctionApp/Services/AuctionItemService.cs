@@ -104,6 +104,12 @@ namespace AuctionApp.Services
                 .Select(item => item.ToDto(true, true));
         }
 
+        public IQueryable<AuctionItemDto> GetAuctionItemsByName(string name)
+        {
+            IQueryable<AuctionItemModel> auctionItems = auctionDbContext.AuctionItems.Include(x => x.Bids);
+            return auctionItems.Where(item => item.itemName == name).OrderByDescending(item => item.itemActivatedDate).Select(item => item.ToDto(true, true));
+        }
+
         public async Task<IQueryable<AuctionItemDto>> GetAllAuctionItemsByBidderId(string userId)
         {
             IQueryable<AuctionItemModel> auctionItems = auctionDbContext.AuctionItems.Include(x => x.Bids);
